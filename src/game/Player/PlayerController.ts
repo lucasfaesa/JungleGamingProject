@@ -1,4 +1,3 @@
-import { Point } from "pixi.js";
 import type { IMoveable } from "../Interfaces/IMoveable";
 import { Player } from "../Player/Player"
 import { InputManager } from "../input/InputManager";
@@ -32,7 +31,8 @@ export class PlayerController implements IMoveable {
         
         const direction : number = negativeInput ? -1 : 1;
 
-        this.player.position.y -= direction * this.moveSpeed * deltaTime;
+        this.player.position.y +=  direction * this.moveSpeed * deltaTime * Math.sin(this.player.rotation);
+        this.player.position.x +=  direction * this.moveSpeed * deltaTime * Math.cos(this.player.rotation);
     }
     
     rotate(deltaTime: number, negativeInput: boolean): void {
