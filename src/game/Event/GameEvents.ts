@@ -1,6 +1,6 @@
 export const GameEvents = {
-    PROJECTILE_SPAWNED: "ProjectileSpawned",
-    PROJECTILE_DESPAWNED: "ProjectileDespawned",
+    UPDATEABLE_INSTANTIATED: "UpdeatbleInstantiated",
+    UPDATEABLE_DESPAWNED: "UpdateableDespawned",
 } as const;
 
 export type GameEventType = typeof GameEvents[keyof typeof GameEvents];
