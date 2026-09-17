@@ -1,6 +1,8 @@
 import { Application, Color, Graphics, Point } from "pixi.js";
 import { InputManager } from "./input/InputManager";
 import { Entity } from "./Entities/Entity";
+import { Player } from "./Player/Player";
+import { PlayerController } from "./Player/PlayerController";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -11,11 +13,16 @@ export class Game {
   private app: Application | null = null;
   private isDestroyed = false;
   private initPromise: Promise<void> | null = null;
-  private player: Entity | null = null;
+  private player: Player | null = null;
+  private playerController : PlayerController | null = null;
   private screenWidth = 800;
   private screenHeight = 600;
   private backgroundColor = 0x1099bb;
-  private inputManager : InputManager | null = null;
+  private inputManager : InputManager;
+
+  constructor(){
+      this.inputManager = new InputManager();
+  }
 
   // Like Unity's Awake: boots up Pixi engine and attaches canvas to the DOM container
   async init(container: HTMLElement): Promise<void> {
@@ -38,8 +45,6 @@ export class Game {
       this.app = app;
       container.appendChild(app.canvas);
       
-      this.inputManager = new InputManager();
-
       this.start();
 
       // Game loop: like Unity's Update() running each frame
@@ -56,8 +61,9 @@ export class Game {
     if (!this.app) return;
 
     //player
-    this.player = new Entity(new Point(100,100));
-        
+    this.player = new Player(new Point(100,100));
+    this.playerController = new PlayerController(this.player, this.inputManager);
+
     // app.stage is the root scene hierarchy (like adding to active Scene)
     this.app.stage.addChild(this.player);
   }
@@ -65,11 +71,7 @@ export class Game {
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
     
-    if(this.inputManager?.actionsMap.forward){
-      if (this.player) {
-        this.player.position.y -= 0.1 * deltaTime;
-      }
-    }
+    this.playerController?.update(deltaTime);
   }
 
   // Like Unity's OnDestroy(): frees GPU resources and removes the canvas

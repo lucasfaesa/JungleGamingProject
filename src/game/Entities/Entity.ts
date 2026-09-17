@@ -4,7 +4,7 @@ import { Container, Graphics, Point } from "pixi.js";
 //easily add to the "world"
 export class Entity extends Container{
     
-    public sprite: Graphics | null = null;
+    private sprite: Graphics | null = null;
 
     //sprite is optional "?", if not assigned, we use a red square
     constructor(newPosition: Point, newSprite?: Graphics | null) {

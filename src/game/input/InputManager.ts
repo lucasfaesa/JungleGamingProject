@@ -3,6 +3,7 @@ export class InputManager {
     
     public actionsMap: Record<string, boolean> = {
         forward : false,
+        backwards : false,
         rotateLeft : false,
         rotateRight : false,
         shootFront : false,  
@@ -19,6 +20,9 @@ export class InputManager {
 
         KeyD: "rotateRight",
         ArrowRight: "rotateRight",
+        
+        KeyS: "backwards",
+        ArrowDown : "backwards",
 
         Space: "shootFront",
     };
