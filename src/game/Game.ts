@@ -1,5 +1,6 @@
-import { Application, Color, Graphics } from "pixi.js";
+import { Application, Color, Graphics, Point } from "pixi.js";
 import { InputManager } from "./input/InputManager";
+import { Entity } from "./Entities/Entity";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -10,7 +11,7 @@ export class Game {
   private app: Application | null = null;
   private isDestroyed = false;
   private initPromise: Promise<void> | null = null;
-  private testSquare: Graphics | null = null;
+  private player: Entity | null = null;
   private screenWidth = 800;
   private screenHeight = 600;
   private backgroundColor = 0x1099bb;
@@ -54,22 +55,19 @@ export class Game {
   private start(): void {
     if (!this.app) return;
 
-
-    // simple 2D visual object (like a GameObject with a Sprite/MeshRenderer)
-    this.testSquare = new Graphics().rect(0, 0, 50, 50).fill(0xff0000);
-    this.testSquare.x = 100;
-    this.testSquare.y = 100;
-
+    //player
+    this.player = new Entity(new Point(100,100));
+        
     // app.stage is the root scene hierarchy (like adding to active Scene)
-    this.app.stage.addChild(this.testSquare);
+    this.app.stage.addChild(this.player);
   }
 
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
     
     if(this.inputManager?.actionsMap.forward){
-      if (this.testSquare) {
-        this.testSquare.y -= 0.1 * deltaTime;
+      if (this.player) {
+        this.player.position.y -= 0.1 * deltaTime;
       }
     }
   }
