@@ -18,7 +18,7 @@ export class Entity extends Container{
         this.rotation = rotation;
     }
 
-    public setSprite(newSprite: Graphics) {
+    private setSprite(newSprite: Graphics) {
         if (this.sprite) {
             this.removeChild(this.sprite);
         }

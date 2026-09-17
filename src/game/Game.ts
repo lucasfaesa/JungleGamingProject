@@ -73,6 +73,7 @@ export class Game {
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
     
+    this.world?.update(deltaTime);
     this.playerController?.update(deltaTime);
   }
 
@@ -80,7 +81,9 @@ export class Game {
   async destroy(): Promise<void> {
     this.isDestroyed = true;
 
+    this.world?.destroy();
     this.inputManager?.destroy();
+
     // wait for init to finish before destroying if it was still in progress
     if (this.initPromise) {
       await this.initPromise;
