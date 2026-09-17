@@ -1,4 +1,5 @@
 import { Application, Color, Graphics } from "pixi.js";
+import { InputManager } from "./input/InputManager";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -13,6 +14,7 @@ export class Game {
   private screenWidth = 800;
   private screenHeight = 600;
   private backgroundColor = 0x1099bb;
+  private inputManager : InputManager | null = null;
 
   // Like Unity's Awake: boots up Pixi engine and attaches canvas to the DOM container
   async init(container: HTMLElement): Promise<void> {
@@ -25,14 +27,17 @@ export class Game {
         backgroundColor: this.backgroundColor,
       });
 
+      
       // if destroyed while init was still running (e.g. React Strict Mode in dev)
       if (this.isDestroyed) {
         app.destroy({ removeView: true }, { children: true });
         return;
       }
-
+      
       this.app = app;
       container.appendChild(app.canvas);
+      
+      this.inputManager = new InputManager();
 
       this.start();
 
@@ -49,6 +54,7 @@ export class Game {
   private start(): void {
     if (!this.app) return;
 
+
     // simple 2D visual object (like a GameObject with a Sprite/MeshRenderer)
     this.testSquare = new Graphics().rect(0, 0, 50, 50).fill(0xff0000);
     this.testSquare.x = 100;
@@ -60,8 +66,11 @@ export class Game {
 
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
-    if (this.testSquare) {
-      this.testSquare.x += 0.1 * deltaTime;
+    
+    if(this.inputManager?.forward){
+      if (this.testSquare) {
+        this.testSquare.y -= 0.1 * deltaTime;
+      }
     }
   }
 
@@ -69,6 +78,7 @@ export class Game {
   async destroy(): Promise<void> {
     this.isDestroyed = true;
 
+    this.inputManager?.destroy();
     // wait for init to finish before destroying if it was still in progress
     if (this.initPromise) {
       await this.initPromise;
