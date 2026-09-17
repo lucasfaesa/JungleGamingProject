@@ -67,7 +67,7 @@ export class Game {
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
     
-    if(this.inputManager?.forward){
+    if(this.inputManager?.actionsMap.forward){
       if (this.testSquare) {
         this.testSquare.y -= 0.1 * deltaTime;
       }

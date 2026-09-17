@@ -1,12 +1,27 @@
 export class InputManager {
     
-    //game will check this each frame
-    public forward = false;
-    public rotateLeft = false;
-    public rotateRight = false;
-    public shootFront = false;
-    public shootLeft = false;
-    public shootRight = false;
+    
+    public actionsMap: Record<string, boolean> = {
+        forward : false,
+        rotateLeft : false,
+        rotateRight : false,
+        shootFront : false,  
+        shootLeft : false,
+        shootRight : false,
+    };
+
+    private keysMap: Record<string, string> = {
+        KeyW: "forward",
+        ArrowUp: "forward",
+
+        KeyA: "rotateLeft",
+        ArrowLeft: "rotateLeft",
+
+        KeyD: "rotateRight",
+        ArrowRight: "rotateRight",
+
+        Space: "shootFront",
+    };
 
     constructor(){
         window.addEventListener("keydown", this.onKeyDown);
@@ -19,23 +34,19 @@ export class InputManager {
     }
 
     private onKeyDown = (e: KeyboardEvent) => {
+        const action : string = this.keysMap[e.code];
 
-        switch(e.code){
-            case "KeyW":
-            case "ArrowUp":
-                console.log("Move up");
-                this.forward = true;
-            break;
+        if(action !== undefined){
+            this.actionsMap[action] = true;
         }
     }
 
     private onKeyUp = (e: KeyboardEvent) => {
 
-        switch(e.code){
-            case "KeyW":
-            case "ArrowUp":
-                this.forward = false;
-            break;
+        const action : string = this.keysMap[e.code];
+
+        if(action !== undefined){
+            this.actionsMap[action] = false;
         }
     }
 }
