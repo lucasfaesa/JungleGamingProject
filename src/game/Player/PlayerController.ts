@@ -15,19 +15,20 @@ export class PlayerController implements IUpdateable{
 
     public update(deltaTime : number) : void{
                 
-        if(this.inputManager.actionsMap.forward)
+        if(this.inputManager.heldActionsMap.forward)
             this.player.moveVertical(deltaTime, false);
-        if(this.inputManager.actionsMap.backwards)
+        if(this.inputManager.heldActionsMap.backwards)
             this.player.moveVertical(deltaTime, true);
-        if(this.inputManager.actionsMap.rotateRight)
+        if(this.inputManager.heldActionsMap.rotateRight)
             this.player.rotate(deltaTime, false);
-        if(this.inputManager.actionsMap.rotateLeft)
+        if(this.inputManager.heldActionsMap.rotateLeft)
             this.player.rotate(deltaTime, true);
-        if(this.inputManager.actionsMap.shootFront)
+
+        if(this.inputManager.tryConsumeAction(this.inputManager.shootForwardAction))
             this.player.shootForward();
-        if(this.inputManager.actionsMap.shootLeft)
+        if(this.inputManager.tryConsumeAction(this.inputManager.shootLeftAction))
             this.player.shootSideways(false);
-        if(this.inputManager.actionsMap.shootRight)
+        if(this.inputManager.tryConsumeAction(this.inputManager.shootRightAction))
             this.player.shootSideways(true);
     }
     

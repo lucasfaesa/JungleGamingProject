@@ -1,4 +1,4 @@
 export interface IShooter {
 
-    shoot(shooter : IShooter) : void;
+    shoot() : void;
 }

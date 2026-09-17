@@ -1,4 +1,4 @@
-import type { Graphics, Point } from "pixi.js";
+import { Point, Graphics, DEG_TO_RAD } from "pixi.js";
 import { Entity } from "../Entities/Entity";
 import type { IMoveable } from "../Interfaces/IMoveable";
 import { Canon } from "../projectile/Canon";
@@ -13,25 +13,26 @@ export class Player extends Entity implements IMoveable, IShooter {
     moveSpeed: number = 2;
     rotationSpeed: number = 0.05;
 
-    constructor(newPosition: Point, newSprite?: Graphics | null){
+    constructor(newPosition: Point, newSprite?: Graphics | null) {
         super(newPosition, 0, newSprite);
+        
+    
+        this.frontCanon = new Canon(new Point(0,-16), 0, new Graphics().rect(-7, -7, 15, 15).fill(0xA000FF));
+        this.leftCanon = new Canon(new Point(-16,0), -90 * DEG_TO_RAD, new Graphics().rect(-7, -7, 15, 15).fill(0x0000FF));
+        this.rightCanon = new Canon(new Point(16,0), 90 * DEG_TO_RAD, new Graphics().rect(-7, -7, 15, 15).fill(0x00FFFF));
 
-        this.frontCanon = new Canon(this.position);
-        this.leftCanon = new Canon(this.position, 90);
-        this.rightCanon = new Canon(this.position, -90);
 
         this.addChild(this.frontCanon);
         this.addChild(this.leftCanon);
         this.addChild(this.rightCanon);
     }
-    
 
     moveVertical(deltaTime: number, negativeInput: boolean): void {
         
         const direction : number = negativeInput ? -1 : 1;
 
-        this.position.y +=  direction * this.moveSpeed * deltaTime * Math.sin(this.rotation);
-        this.position.x +=  direction * this.moveSpeed * deltaTime * Math.cos(this.rotation);
+        this.position.x +=  direction * this.moveSpeed * deltaTime * Math.sin(this.rotation);
+        this.position.y += -direction * this.moveSpeed * deltaTime * Math.cos(this.rotation);
     }
     
     rotate(deltaTime: number, negativeInput: boolean): void {
@@ -42,14 +43,17 @@ export class Player extends Entity implements IMoveable, IShooter {
     }
 
     public shootForward (){
-        this.shoot(this.frontCanon);
+        console.log("shooting forward")
+        this.frontCanon.shoot();
     }
 
     public shootSideways(rightSide : boolean){
-        this.shoot(rightSide ? this.rightCanon : this.leftCanon);
+        console.log("shooting sidewats")
+        rightSide ? this.rightCanon.shoot() : this.leftCanon.shoot();
     }
 
-    shoot(shooter : IShooter): void {
-        shooter.shoot;
+    shoot(): void {
+        
     }
+    
 }
