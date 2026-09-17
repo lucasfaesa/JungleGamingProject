@@ -6,7 +6,7 @@ export class PlayerController implements IMoveable {
 
     public player : Player;
     private moveSpeed: number = 2;
-    private rotationSpeed: number = 0.1;
+    private rotationSpeed: number = 0.05;
     private inputManager : InputManager;
 
     constructor(player : Player, inputManager : InputManager){

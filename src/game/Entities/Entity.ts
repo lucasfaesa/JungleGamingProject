@@ -10,7 +10,8 @@ export class Entity extends Container{
     constructor(newPosition: Point, newSprite?: Graphics | null) {
         super();
 
-        const graphic = newSprite ?? new Graphics().rect(0, 0, 50, 50).fill(0xff0000);
+        //centering the anchor of the graphics "-25, -25"
+        const graphic = newSprite ?? new Graphics().rect(-25, -25, 50, 50).fill(0xff0000);
         this.setSprite(graphic);
 
         this.position.copyFrom(newPosition);
@@ -20,6 +21,8 @@ export class Entity extends Container{
         if (this.sprite) {
             this.removeChild(this.sprite);
         }
+
+    
         this.sprite = newSprite;
         this.addChild(newSprite);
     }
