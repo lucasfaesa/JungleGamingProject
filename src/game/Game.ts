@@ -2,6 +2,7 @@ import { Application, Point } from "pixi.js";
 import { InputManager } from "./input/InputManager";
 import { Player } from "./Player/Player";
 import { PlayerController } from "./Player/PlayerController";
+import { World } from "./World/World";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -14,6 +15,7 @@ export class Game {
   private initPromise: Promise<void> | null = null;
   private player: Player | null = null;
   private playerController : PlayerController | null = null;
+  private world : World | null = null;
   private screenWidth = 800;
   private screenHeight = 600;
   private backgroundColor = 0x1099bb;
@@ -59,6 +61,7 @@ export class Game {
   private start(): void {
     if (!this.app) return;
 
+    this.world = new World(this.app.stage);
     //player
     this.player = new Player(new Point(100,100));
     this.playerController = new PlayerController(this.player, this.inputManager);
