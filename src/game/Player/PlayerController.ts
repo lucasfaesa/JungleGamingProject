@@ -1,12 +1,11 @@
 
 import { Player } from "../Player/Player"
 import { InputManager } from "../input/InputManager";
+import type {IUpdateable} from "../Interfaces/IUpdateable"
 
-export class PlayerController {
+export class PlayerController implements IUpdateable{
 
     public player : Player;
-    private moveSpeed: number = 2;
-    private rotationSpeed: number = 0.05;
     private inputManager : InputManager;
 
     constructor(player : Player, inputManager : InputManager){
@@ -24,7 +23,12 @@ export class PlayerController {
             this.player.rotate(deltaTime, false);
         if(this.inputManager.actionsMap.rotateLeft)
             this.player.rotate(deltaTime, true);
-
+        if(this.inputManager.actionsMap.shootFront)
+            this.player.shootForward();
+        if(this.inputManager.actionsMap.shootLeft)
+            this.player.shootSideways(false);
+        if(this.inputManager.actionsMap.shootRight)
+            this.player.shootSideways(true);
     }
     
     

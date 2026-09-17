@@ -7,7 +7,7 @@ export class Entity extends Container{
     private sprite: Graphics | null = null;
 
     //sprite is optional "?", if not assigned, we use a red square
-    constructor(newPosition: Point, newSprite?: Graphics | null) {
+    constructor(newPosition: Point, rotation : number = 0, newSprite?: Graphics | null) {
         super();
 
         //centering the anchor of the graphics "-25, -25"
@@ -15,6 +15,7 @@ export class Entity extends Container{
         this.setSprite(graphic);
 
         this.position.copyFrom(newPosition);
+        this.rotation = rotation;
     }
 
     public setSprite(newSprite: Graphics) {
@@ -22,7 +23,6 @@ export class Entity extends Container{
             this.removeChild(this.sprite);
         }
 
-    
         this.sprite = newSprite;
         this.addChild(newSprite);
     }

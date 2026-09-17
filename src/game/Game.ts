@@ -1,6 +1,5 @@
-import { Application, Color, Graphics, Point } from "pixi.js";
+import { Application, Point } from "pixi.js";
 import { InputManager } from "./input/InputManager";
-import { Entity } from "./Entities/Entity";
 import { Player } from "./Player/Player";
 import { PlayerController } from "./Player/PlayerController";
 
