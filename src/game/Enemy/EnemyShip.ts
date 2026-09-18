@@ -9,6 +9,9 @@ export abstract class EnemyShip extends Ship {
 
     private tilemapData: TilemapData;
 
+    protected canTurn : boolean = true;
+    protected canMove : boolean = true;
+
     // Radius (in tiles) around the enemy that generates repulsion
     private readonly repulsionRadius: number = 1;
     // How strongly repulsion weighs against attraction to the player
@@ -25,9 +28,13 @@ export abstract class EnemyShip extends Ship {
         super.update(deltaTime);
 
         const desiredAngle = this.computeSteeringAngle();
-        this.faceDirection(desiredAngle, deltaTime);
+        
+        if(this.canTurn){
+            this.faceDirection(desiredAngle, deltaTime);
+        }
 
-        this.moveVertical(deltaTime, false);
+        if(this.canMove)
+            this.moveVertical(deltaTime, false);
     }
 
     //calculates the correct angle based on player attraction + repulsion of islands
@@ -84,5 +91,11 @@ export abstract class EnemyShip extends Ship {
         if (Math.abs(diff) < 0.02) return;
 
         this.rotate(deltaTime, diff < 0);
+    }
+
+    protected getDistanceToPlayer() : number {
+        const dx = this.targetPlayer.position.x - this.position.x;
+        const dy = this.targetPlayer.position.y - this.position.y;
+        return Math.sqrt(dx * dx + dy * dy) || 1;
     }
 }

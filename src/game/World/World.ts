@@ -9,6 +9,7 @@ import { TilemapData } from "../Map/TilemapData";
 import { CollisionManager } from "../Collision/CollisionManager";
 import type { Ship } from "../Ship/Ship";
 import { Chaser } from "../Enemy/Chaser";
+import { Shooter } from "../Enemy/Shooter";
 
 //controls anything related to the world
 export class World{
@@ -62,8 +63,11 @@ export class World{
     }
 
     private spawnEnemy(position: Point){
-        const chaser = new Chaser(position, this.player, this.tilemapData);
-        this.spawnUpdateable(chaser);
+        //const chaser = new Chaser(position, this.player, this.tilemapData);
+        //this.spawnUpdateable(chaser);
+
+        const shooter = new Shooter(position, this.player, this.tilemapData);
+        this.spawnUpdateable(shooter);
     }
 
     private generateTiles(){
