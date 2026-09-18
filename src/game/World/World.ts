@@ -7,9 +7,8 @@ import { Player } from "../Player/Player";
 import { TileMap } from "../Map/TileMap";
 import { TilemapData } from "../Map/TilemapData";
 import { CollisionManager } from "../Collision/CollisionManager";
-import { Chaser } from "../Enemy/Chaser";
-import { Shooter } from "../Enemy/Shooter";
 import { GameState } from "../GameFlow/GameManager";
+import { Spawner } from "../Spawner/Spawner";
 
 //controls anything related to the world
 export class World{
@@ -20,6 +19,7 @@ export class World{
     private tileMap! : TileMap;
     private tilemapData! : TilemapData;
     private collisionManager! : CollisionManager;
+    private spawner : Spawner;
 
     private readonly onUpdateableInstantiated = (data?: unknown) => this.OnUpdateableInstantiated(data);
     private readonly onUpdateableDespawned    = (data?: unknown) => this.OnUpdateableDespawned(data);
@@ -37,6 +37,9 @@ export class World{
         eventHub.subscribe(GameEvents.GAME_STATE_CHANGED, this.onGameStateChanged);
         
         this.player = this.spawnPlayer(new Point(250,600));
+
+        this.spawner = new Spawner(this.player, this.tilemapData, this.tileMap);
+        this.updateables.push(this.spawner);
     }
 
     public destroy(){
@@ -46,6 +49,7 @@ export class World{
         eventHub.unsubscribe(GameEvents.GAME_STATE_CHANGED, this.onGameStateChanged);
 
         this.collisionManager?.destroy();
+        this.spawner?.destroy();
     }
 
     public update(deltaTime: number): void {
@@ -61,7 +65,7 @@ export class World{
         const gameState = data as GameState;
 
         if (gameState === GameState.Playing) {
-            this.spawnShips();
+            
         }
     };
 
@@ -69,18 +73,9 @@ export class World{
         return this.player;
     }
 
-    private spawnShips(){
-        this.spawnEnemy(new Point(500,260));
-    }
-
     private spawnPlayer(position : Point) : Player {
         const player = new Player(position);
         return player;
-    }
-
-    private spawnEnemy(position: Point){
-        new Chaser(position, this.player, this.tilemapData);
-        new Shooter(position, this.player, this.tilemapData, this.tileMap);
     }
 
     private generateTiles(){
