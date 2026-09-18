@@ -1,20 +1,26 @@
-import type { Graphics, Point } from "pixi.js";
+import { Graphics, Point } from "pixi.js";
 import { Entity } from "../Entities/Entity";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import type { IProjectile } from "../Interfaces/IProjectile";
 import type { ICollideable } from "../Interfaces/ICollideable";
-import type { ICircleCollider } from "../Interfaces/ICircleCollider";
+import { collisionHelpers } from "../Collision/CollisionHelpers";
 
-export class CanonBall extends Entity implements IProjectile, ICircleCollider{
+export class CanonBall extends Entity implements IProjectile, ICollideable{
     
+    //collision stuff
+    size: Point = new Point(15,15);
+    halfSize: Point = new Point(this.size.x/2, this.size.y/2);
+    center: Point = new Point(-this.size.x/2, -this.size.y/2);
+
     speed: number = 5;
     timeout : number = 2000; //ms
-    radius: number = 2;
 
     constructor(newPosition: Point, rotation : number, newSprite?: Graphics | null) {
         super(newPosition, rotation, newSprite);
     
+        this.setSprite(new Graphics().rect(this.center.x, this.center.y, this.size.x, this.size.y).fill(0xFFFF00));
+
         setTimeout(() => {
             this.destroy();
         }, this.timeout);
@@ -23,6 +29,9 @@ export class CanonBall extends Entity implements IProjectile, ICircleCollider{
         eventHub.trigger(GameEvents.COLLIDEABLE_INSTANTIATED, this); //Collision manager will listen and do its own thing
     }
     
+    getCollisionPoints(): Point[] {
+        return collisionHelpers.getBoxColliderPoints(this.position, this.size);
+    }
 
     update(deltaTime: number): void {
         this.move(deltaTime, this.speed);

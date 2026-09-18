@@ -1,3 +1,4 @@
+import { pointInTriangle, type Point } from "pixi.js";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import type { ICollideable } from "../Interfaces/ICollideable";
@@ -43,9 +44,21 @@ export class CollisionManager implements IUpdateable {
     }
 
     public update() {
+        this.checkForCollisionWithIslands();
+    }
+
+    private checkForCollisionWithIslands(){
+
         for (let i = this.collideables.length - 1; i >= 0; i--) {
-            if(this.tileMap.isSolidAt(this.collideables[i].position.x, this.collideables[i].position.y)){
-                this.collideables[i].onCollision();
+            const collideable : ICollideable = this.collideables[i];
+
+            const points : Point[] = collideable.getCollisionPoints();
+
+            for(let j = 0; j < points.length; j++){
+                if(this.tileMap.isSolidAt(points[j].x, points[j].y)){
+                    collideable.onCollision();
+                    break;
+                }
             }
         }
     }
