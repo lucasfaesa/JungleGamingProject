@@ -4,17 +4,23 @@ import type { ISpawneable } from "../Interfaces/ISpawneable";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import { Player } from "../Player/Player";
+import { TileMap } from "../Map/TileMap";
+import { TilemapData } from "../Map/TilemapData";
 
+//controls anything related to the world
 export class World{
 
     private stage : Container;
     private updateables : IUpdateable [] = [];
+    private tileMap : TileMap;
 
     private readonly onUpdateableInstantiated = (data?: unknown) => this.OnUpdateableInstantiated(data);
     private readonly onUpdateableDespawned    = (data?: unknown) => this.OnUpdateableDespawned(data);
 
     constructor(stage : Container){
         this.stage = stage;
+
+        this.generateTiles();
 
         eventHub.subscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.subscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
@@ -36,6 +42,12 @@ export class World{
         const player = new Player(position);
         this.spawnUpdateable(player);
         return player;
+    }
+
+    private generateTiles(){
+        const tilemapData: TilemapData = new TilemapData();
+        this.tileMap = new TileMap(tilemapData);
+        this.stage.addChild(this.tileMap);
     }
 
     private spawnUpdateable(objectToSpawn : ISpawneable){
