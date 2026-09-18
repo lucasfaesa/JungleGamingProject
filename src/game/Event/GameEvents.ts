@@ -5,7 +5,9 @@ export const GameEvents = {
     COLLIDEABLE_INSTANTIATED: "CollideableInstantiated",
     COLLIDEABLE_DESPAWNED: "CollideableDespawned",
 
-    PLAYER_DIED: "PlayerDied"
+    PLAYER_DIED: "PlayerDied",
+
+    GAME_STATE_CHANGED: "GameStateChanged",
 } as const;
 
 export type GameEventType = typeof GameEvents[keyof typeof GameEvents];

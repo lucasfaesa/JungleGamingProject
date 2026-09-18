@@ -3,6 +3,7 @@ import { InputManager } from "./input/InputManager";
 import { Player } from "./Player/Player";
 import { PlayerController } from "./Player/PlayerController";
 import { World } from "./World/World";
+import { GameManager } from "./GameFlow/GameManager";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -13,7 +14,7 @@ export class Game {
   private app: Application | null = null;
   private isDestroyed = false;
   private initPromise: Promise<void> | null = null;
-  private player: Player | null = null;
+  private gameManager : GameManager | null = null;
   private playerController : PlayerController | null = null;
   private world : World | null = null;
   private readonly screenWidth = 1280;
@@ -61,6 +62,9 @@ export class Game {
   private start(): void {
     if (!this.app) return;
 
+    //creating manager
+    this.gameManager = new GameManager();
+
     //creating world, player and assigning it to the controller
     this.world = new World(this.app.stage);
     this.playerController = new PlayerController(this.world.getPlayer(), this.inputManager);
@@ -69,6 +73,7 @@ export class Game {
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
     
+    this.gameManager?.update(deltaTime);
     this.world?.update(deltaTime);
     this.playerController?.update(deltaTime);
   }
@@ -77,6 +82,7 @@ export class Game {
   async destroy(): Promise<void> {
     this.isDestroyed = true;
 
+    this.gameManager?.destroy();
     this.world?.destroy();
     this.inputManager?.destroy();
 

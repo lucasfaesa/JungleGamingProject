@@ -7,9 +7,9 @@ import { Player } from "../Player/Player";
 import { TileMap } from "../Map/TileMap";
 import { TilemapData } from "../Map/TilemapData";
 import { CollisionManager } from "../Collision/CollisionManager";
-import type { Ship } from "../Ship/Ship";
 import { Chaser } from "../Enemy/Chaser";
 import { Shooter } from "../Enemy/Shooter";
+import { GameState } from "../GameFlow/GameManager";
 
 //controls anything related to the world
 export class World{
@@ -23,6 +23,7 @@ export class World{
 
     private readonly onUpdateableInstantiated = (data?: unknown) => this.OnUpdateableInstantiated(data);
     private readonly onUpdateableDespawned    = (data?: unknown) => this.OnUpdateableDespawned(data);
+    private readonly onGameStateChanged    = (data?: unknown) => this.OnGameStateChanged(data);
 
     constructor(stage : Container){
         this.stage = stage;
@@ -30,16 +31,19 @@ export class World{
         this.generateTiles();
         this.activateCollisions();
 
-        this.player = this.spawnPlayer(new Point(250,600));
-        this.spawnEnemy(new Point(500,260));
-
         eventHub.subscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.subscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
+        
+        eventHub.subscribe(GameEvents.GAME_STATE_CHANGED, this.onGameStateChanged);
+        
+        this.player = this.spawnPlayer(new Point(250,600));
     }
 
     public destroy(){
         eventHub.unsubscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.unsubscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
+
+        eventHub.unsubscribe(GameEvents.GAME_STATE_CHANGED, this.onGameStateChanged);
 
         this.collisionManager?.destroy();
     }
@@ -52,22 +56,31 @@ export class World{
 
     }
 
+    private OnGameStateChanged (data?: unknown){
+
+        const gameState = data as GameState;
+
+        if (gameState === GameState.Playing) {
+            this.spawnShips();
+        }
+    };
+
     public getPlayer() : Player {
         return this.player;
     }
 
+    private spawnShips(){
+        this.spawnEnemy(new Point(500,260));
+    }
+
     private spawnPlayer(position : Point) : Player {
         const player = new Player(position);
-        this.spawnUpdateable(player);
         return player;
     }
 
     private spawnEnemy(position: Point){
-        const chaser = new Chaser(position, this.player, this.tilemapData);
-        this.spawnUpdateable(chaser);
-
-        const shooter = new Shooter(position, this.player, this.tilemapData, this.tileMap);
-        this.spawnUpdateable(shooter);
+        new Chaser(position, this.player, this.tilemapData);
+        new Shooter(position, this.player, this.tilemapData, this.tileMap);
     }
 
     private generateTiles(){
