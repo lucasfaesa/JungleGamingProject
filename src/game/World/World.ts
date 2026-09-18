@@ -17,6 +17,7 @@ export class World{
     private stage : Container;
     private updateables : IUpdateable [] = [];
     private tileMap! : TileMap;
+    private tilemapData! : TilemapData;
     private collisionManager! : CollisionManager;
 
     private readonly onUpdateableInstantiated = (data?: unknown) => this.OnUpdateableInstantiated(data);
@@ -29,7 +30,7 @@ export class World{
         this.activateCollisions();
 
         this.player = this.spawnPlayer(new Point(250,600));
-        this.spawnEnemy(new Point(500,100));
+        this.spawnEnemy(new Point(500,260));
 
         eventHub.subscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.subscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
@@ -61,13 +62,13 @@ export class World{
     }
 
     private spawnEnemy(position: Point){
-        const chaser = new Chaser(position, this.player);
+        const chaser = new Chaser(position, this.player, this.tilemapData);
         this.spawnUpdateable(chaser);
     }
 
     private generateTiles(){
-        const tilemapData: TilemapData = new TilemapData();
-        this.tileMap = new TileMap(tilemapData);
+        this.tilemapData = new TilemapData();
+        this.tileMap = new TileMap(this.tilemapData);
         this.stage.addChild(this.tileMap);
     }
 

@@ -16,8 +16,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
 
     //collider stuff
     public colliderSize: Point = new Point(50, 50);
-    protected halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2,);
-    protected center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
+    public halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2,);
+    public center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
     protected previousPosition: Point = new Point();
     protected previousRotation: number = 0;
 
@@ -45,8 +45,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
 
     protected onCollidedWithIsland(): void {
         // rollback to last safe frame position
-        //this.position.copyFrom(this.previousPosition);
-        //this.rotation = this.previousRotation;
+        this.position.copyFrom(this.previousPosition);
+        this.rotation = this.previousRotation;
     }
 
     public moveVertical(deltaTime: number, negativeInput: boolean): void {
