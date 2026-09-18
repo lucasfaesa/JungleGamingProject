@@ -1,8 +1,9 @@
-import type { Container } from "pixi.js";
+import type { Container, Point } from "pixi.js";
 import type { IUpdateable } from "../Interfaces/IUpdateable";
 import type { ISpawneable } from "../Interfaces/ISpawneable";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
+import { Player } from "../Player/Player";
 
 export class World{
 
@@ -29,6 +30,12 @@ export class World{
         for (let i = this.updateables.length - 1; i >= 0; i--) {
             this.updateables[i].update(deltaTime);
         }
+    }
+
+    public spawnPlayer(position : Point) : Player {
+        const player = new Player(position);
+        this.spawnUpdateable(player);
+        return player;
     }
 
     private spawnUpdateable(objectToSpawn : ISpawneable){

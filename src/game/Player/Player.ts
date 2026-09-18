@@ -3,8 +3,9 @@ import { Entity } from "../Entities/Entity";
 import type { IMoveable } from "../Interfaces/IMoveable";
 import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";
+import type { ISpawneable } from "../Interfaces/ISpawneable";
 
-export class Player extends Entity implements IMoveable, IShooter {
+export class Player extends Entity implements IMoveable, IShooter, ISpawneable{
 
     private frontCanon : Canon;
     private leftCanon : Canon;
@@ -25,6 +26,10 @@ export class Player extends Entity implements IMoveable, IShooter {
         this.addChild(this.frontCanon);
         this.addChild(this.leftCanon);
         this.addChild(this.rightCanon);
+    }
+    
+    update(deltaTime: number): void {
+        //nothing yet
     }
 
     moveVertical(deltaTime: number, negativeInput: boolean): void {

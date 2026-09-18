@@ -61,13 +61,10 @@ export class Game {
   private start(): void {
     if (!this.app) return;
 
+    //creating world, player and assigning it to the controller
     this.world = new World(this.app.stage);
-    //player
-    this.player = new Player(new Point(100,100));
-    this.playerController = new PlayerController(this.player, this.inputManager);
-
-    // app.stage is the root scene hierarchy (like adding to active Scene)
-    this.app.stage.addChild(this.player);
+    const player : Player = this.world.spawnPlayer(new Point(400,300));
+    this.playerController = new PlayerController(player, this.inputManager);
   }
 
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
