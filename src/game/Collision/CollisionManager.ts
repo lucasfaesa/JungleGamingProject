@@ -78,8 +78,13 @@ export class CollisionManager implements IUpdateable {
                 if (this.pendingRemovals.has(second))  //if this is a pending object to be remove, we skip
                     continue;
 
+                //skipping calculations if the first collider ignores the second collider layer and vice-versa
+                if (first.ignoredCollisionLayers?.includes(second.collisionLayer) || second.ignoredCollisionLayers?.includes(first.collisionLayer)) {
+                    continue;
+                }
+
+                //check collisions
                 if (this.checkAABBCollision(first, second)) {
-                    // Finish both callbacks for this pair before skipping pending removals.
                     first.onCollision(second.collisionLayer, second);
                     second.onCollision(first.collisionLayer, first);
                 }

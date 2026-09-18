@@ -14,7 +14,8 @@ export class CanonBall extends Entity implements IProjectile, ICollideable, IDam
     colliderSize: Point = new Point(15,15);
     halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2);
     center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
-    collisionLayer: CollisionType = CollisionType.Projectile;
+    collisionLayer: CollisionType;
+    ignoredCollisionLayers: CollisionType[];
 
     protected graphicSize: Point = new Point(15,15);
     speed: number = 250;
@@ -23,10 +24,12 @@ export class CanonBall extends Entity implements IProjectile, ICollideable, IDam
 
     damage: number;
 
-    constructor(newPosition: Point, rotation : number, damage : number, size? : Point) {
+    constructor(newPosition: Point, rotation : number, damage : number, collisionType : CollisionType, ignoredCollisionLayers : CollisionType[], size? : Point) {
         super(newPosition, rotation, size);
         
         this.damage = damage;
+        this.collisionLayer = collisionType;
+        this.ignoredCollisionLayers = ignoredCollisionLayers;
 
         this.setSprite(new Graphics().rect(this.center.x, this.center.y, this.colliderSize.x, this.colliderSize.y).fill(0xFFFF00));
 
@@ -64,8 +67,9 @@ export class CanonBall extends Entity implements IProjectile, ICollideable, IDam
     onCollision(type : CollisionType, other?: ICollideable): void {
         //console.log("collision!!");
         switch(type){
-            case CollisionType.Projectile:
-            //ignore
+            case CollisionType.PlayerProjectile:
+            case CollisionType.EnemyProjectile:
+                //ignore
             break;
             default:
                 this.destroy();

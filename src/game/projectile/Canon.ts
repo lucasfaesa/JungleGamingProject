@@ -3,6 +3,7 @@ import { CanonBall } from "./CanonBall";
 import type { IShooter } from "../Interfaces/IShooter";
 import { Graphics, Point } from "pixi.js";
 import type { IDamageDealer } from "../Interfaces/IDamageDealer";
+import type { CollisionType } from "../Collision/CollisionType";
 
 //can exist inside a ship or in the world
 export class Canon extends Entity implements IShooter, IDamageDealer {
@@ -10,11 +11,15 @@ export class Canon extends Entity implements IShooter, IDamageDealer {
     protected graphicSize: Point = new Point(15,15);
     
     damage: number;
+    projectileCollisionType : CollisionType;
+    ignoredCollisionLayers: CollisionType[];
 
-    constructor(newPosition: Point, rotation : number = 0, damage : number, size? : Point){
+    constructor(newPosition: Point, rotation : number = 0, damage : number, collisionType : CollisionType, ignoredCollisionLayers : CollisionType[], size? : Point){
         super(newPosition, rotation, size);
 
         this.damage = damage;
+        this.projectileCollisionType = collisionType;
+        this.ignoredCollisionLayers = ignoredCollisionLayers;
 
         this.setSprite(new Graphics().rect(-this.graphicSize.x/2, -this.graphicSize.y/2, this.graphicSize.x, this.graphicSize.y).fill(0xA000FF));
     }
@@ -32,7 +37,7 @@ export class Canon extends Entity implements IShooter, IDamageDealer {
         const spawnPosY = globalPos.y - spawnOffset * Math.cos(globalRotation);
 
 
-        const canonBall : CanonBall = new CanonBall(new Point(spawnPosX, spawnPosY), globalRotation, this.damage);
+        const canonBall : CanonBall = new CanonBall(new Point(spawnPosX, spawnPosY), globalRotation, this.damage, this.projectileCollisionType, this.ignoredCollisionLayers);
     }
     
 }

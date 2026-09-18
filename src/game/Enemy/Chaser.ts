@@ -15,15 +15,11 @@ export class Chaser extends EnemyShip {
         this.moveSpeed = 120;
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Enemy; 
-
+        this.ignoredCollisionLayers = [CollisionType.EnemyProjectile, CollisionType.Enemy];
         this.health = 2;
         this.damage = 3;
 
-        this.setSprite(
-            new Graphics()
-                .rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y)
-                .fill(0xFFFF00)
-        );
+        this.setSprite(new Graphics().rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y).fill(0xFFFF00));
 
         console.log("Chaser Spawned");
     }
@@ -38,7 +34,14 @@ export class Chaser extends EnemyShip {
 
                 this.destroy();
                 console.log("Collision with player");
-                break;
+            break;
+            case CollisionType.PlayerProjectile:
+            console.log("received damage from player projectile");
+
+            if(InterfaceHelper.isDamageDealer(otherCollideable)){ //checking if other collideble implements IdamageDealer
+                this.onDamageTaken(otherCollideable.damage);
+            }
+            break;
         }
     }    
 }

@@ -4,9 +4,9 @@ import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
-import { Chaser } from "../Enemy/Chaser";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
+import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
 export class Player extends Ship implements IShooter {
     private frontCanon: Canon;
@@ -19,21 +19,19 @@ export class Player extends Ship implements IShooter {
         this.moveSpeed = 120;
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Player; 
-
+        this.ignoredCollisionLayers = [CollisionType.Player, CollisionType.PlayerProjectile];
 
         //health
         this.health = 10;
         this.damage = 1;
 
-        this.setSprite(
-            new Graphics()
-                .rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y)
-                .fill(0xff0000)
-        );
+        this.setSprite(new Graphics().rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y).fill(0xff0000));
 
-        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage);
-        this.leftCanon = new Canon(new Point(-16, 0), -90 * DEG_TO_RAD, this.damage);
-        this.rightCanon = new Canon(new Point(16, 0), 90 * DEG_TO_RAD, this.damage);
+        const projectileCollisionsToIgnore: CollisionType[] = [  CollisionType.Player,  CollisionType.PlayerProjectile];
+
+        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
+        this.leftCanon = new Canon(new Point(-16, 0), -90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
+        this.rightCanon = new Canon(new Point(16, 0), 90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
 
         this.addChild(this.frontCanon);
         this.addChild(this.leftCanon);
@@ -54,6 +52,14 @@ export class Player extends Ship implements IShooter {
         switch(type){
             case CollisionType.Enemy:
                 this.onCollidedWithShip();
+            break;
+            case CollisionType.EnemyProjectile:
+            console.log("received damage from enemy projectile");
+
+            if(InterfaceHelper.isDamageDealer(otherCollideable)){ //checking if other collideble implements IdamageDealer
+                this.onDamageTaken(otherCollideable.damage);
+            }
+            break;
         }
     }
 
@@ -61,7 +67,7 @@ export class Player extends Ship implements IShooter {
         super.onDamageTaken(damage);
     }
 
-    protected destroy(): void {
+    public destroy(): void {
         super.destroy();
         eventHub.trigger(GameEvents.PLAYER_DIED);
     }

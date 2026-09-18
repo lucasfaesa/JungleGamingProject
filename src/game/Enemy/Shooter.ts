@@ -7,6 +7,7 @@ import type { Player } from "../Player/Player";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { Canon } from "../projectile/Canon";
+import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
 export class Shooter extends EnemyShip implements IShooter{
     
@@ -31,7 +32,8 @@ export class Shooter extends EnemyShip implements IShooter{
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Enemy; 
         this.canMove = false;
-        
+        this.ignoredCollisionLayers = [CollisionType.EnemyProjectile, CollisionType.Enemy];
+
         this.health = 4;
         this.damage = 1;
 
@@ -41,7 +43,8 @@ export class Shooter extends EnemyShip implements IShooter{
                 .fill(0xFF00FF)
         );
 
-        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage);
+        const projectileCollisionsToIgnore: CollisionType[] = [  CollisionType.Enemy,  CollisionType.EnemyProjectile];
+        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage, CollisionType.EnemyProjectile, projectileCollisionsToIgnore);
         this.addChild(this.frontCanon);
         
         console.log("Shooter Spawned");
@@ -82,13 +85,20 @@ export class Shooter extends EnemyShip implements IShooter{
         }
     }
     
-    public onCollision(type: CollisionType, other?: ICollideable): void {
-        super.onCollision(type, other);
+    public onCollision(type: CollisionType, otherCollideable?: ICollideable): void {
+        super.onCollision(type, otherCollideable);
 
         switch(type){
             case CollisionType.Player:    
                 //nothing for now
-                break;
+            break;
+            case CollisionType.PlayerProjectile:
+                console.log("received damage from player projectile");
+                
+                if(InterfaceHelper.isDamageDealer(otherCollideable)){ //checking if other collideble implements IdamageDealer
+                    this.onDamageTaken(otherCollideable.damage);
+                }
+            break;
         }
     }
 

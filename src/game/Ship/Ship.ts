@@ -9,20 +9,19 @@ import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import type { IDamageable } from "../Interfaces/IDamageable";
 import type { IDamageDealer } from "../Interfaces/IDamageDealer";
-import { CanonBall } from "../projectile/CanonBall";
-import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
 export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICollideable, IDamageable, IDamageDealer{
     
     protected graphicSize: Point = new Point(50, 50);
     public moveSpeed: number = 100;
     public rotationSpeed: number = 2.5;
-
+    
     //collider stuff
     public colliderSize: Point = new Point(50, 50);
     public halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2,);
     public center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
     public collisionLayer: CollisionType = CollisionType.DEFAULT;
+    public ignoredCollisionLayers: CollisionType[] = [CollisionType.NONE];
     
     protected previousPosition: Point = new Point();
     protected previousRotation: number = 0;
@@ -51,13 +50,6 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         switch (type) {
             case CollisionType.Island:
                 this.onCollidedWithIsland();
-                break;
-            case CollisionType.Projectile:
-                console.log("projectile collision with ship, other collideable:");
-
-                if(InterfaceHelper.isDamageDealer(otherCollideable)){ //checking if other collideble implements IdamageDealer
-                    this.onDamageTaken(otherCollideable.damage);
-                }
                 break;
         }
     }
@@ -107,7 +99,7 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         }
     }
 
-    protected destroy(): void {
+    public destroy(): void {
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this);
         eventHub.trigger(GameEvents.UPDATEABLE_DESPAWNED, this);
     }
