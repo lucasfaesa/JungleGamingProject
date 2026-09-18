@@ -2,6 +2,7 @@ import { Point, Graphics, DEG_TO_RAD } from "pixi.js";
 import { Ship } from "../Ship/Ship";
 import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";
+import { CollisionType } from "../Collision/CollisionType";
 
 export class Player extends Ship implements IShooter {
     private frontCanon: Canon;
@@ -13,6 +14,7 @@ export class Player extends Ship implements IShooter {
 
         this.moveSpeed = 120;
         this.rotationSpeed = 3;
+        this.collisionLayer = CollisionType.Player; 
 
         this.setSprite(
             new Graphics()

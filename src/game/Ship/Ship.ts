@@ -18,6 +18,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
     public colliderSize: Point = new Point(50, 50);
     public halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2,);
     public center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
+    public collisionLayer: CollisionType = CollisionType.DEFAULT;
+    
     protected previousPosition: Point = new Point();
     protected previousRotation: number = 0;
 
@@ -31,6 +33,7 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this);
     }
     
+    
     public getCollisionPoints(): Point[] {
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);
     }
@@ -43,11 +46,12 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         }
     }
 
-    protected onCollidedWithIsland(): void {
+    protected onCollidedWithIsland(){
         // rollback to last safe frame position
         this.position.copyFrom(this.previousPosition);
         this.rotation = this.previousRotation;
     }
+
 
     public moveVertical(deltaTime: number, negativeInput: boolean): void {
         this.previousPosition.copyFrom(this.position);

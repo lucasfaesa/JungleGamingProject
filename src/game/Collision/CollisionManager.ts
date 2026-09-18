@@ -46,6 +46,7 @@ export class CollisionManager implements IUpdateable {
 
     public update() {
         this.checkForCollisionWithIslands();
+        this.checkForCollisionWithOtherColliders();
     }
 
     private checkForCollisionWithIslands(){
@@ -62,5 +63,36 @@ export class CollisionManager implements IUpdateable {
                 }
             }
         }
+    }
+
+    private checkForCollisionWithOtherColliders(){
+        for (let i = this.collideables.length - 1; i >= 0; i--) {
+            const first = this.collideables[i];
+
+            for (let j = i - 1; j >= 0; j--) {
+                const second = this.collideables[j];
+
+                if (this.checkAABBCollision(first, second)) {
+                    first.onCollision(second.collisionLayer, second);
+                    second.onCollision(first.collisionLayer, first);
+                }
+            }
+        }
+    }
+
+    
+    // since positions are centered, two boxes overlap if the distance between their centers
+    // along each axis is less than the sum of their half-dimensions (half-widths and half-heights).
+    private checkAABBCollision(a: ICollideable, b: ICollideable): boolean {
+        // Distance between centers along X and Y axes
+        const dx = Math.abs(a.position.x - b.position.x);
+        const dy = Math.abs(a.position.y - b.position.y);
+
+        // Maximum allowed distance before edges stop touching
+        const combinedHalfWidth = a.halfSize.x + b.halfSize.x;
+        const combinedHalfHeight = a.halfSize.y + b.halfSize.y;
+
+        // Collision occurs only if overlapping on both horizontal and vertical axes
+        return dx < combinedHalfWidth && dy < combinedHalfHeight;
     }
 }

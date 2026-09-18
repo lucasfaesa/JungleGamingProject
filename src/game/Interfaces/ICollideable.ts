@@ -6,6 +6,7 @@ export interface ICollideable{
     colliderSize : Point;
     halfSize : Point;
     center: Point;
+    collisionLayer : CollisionType;
 
     getCollisionPoints(): Point[];
     onCollision(type: CollisionType, other?: ICollideable) : void;
