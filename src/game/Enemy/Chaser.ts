@@ -4,6 +4,8 @@ import { EnemyShip } from "./EnemyShip";
 import type { TilemapData } from "../Map/TilemapData";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
+import type { IDamageable } from "../Interfaces/IDamageable";
+import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
 export class Chaser extends EnemyShip {
 
@@ -15,6 +17,9 @@ export class Chaser extends EnemyShip {
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Enemy; 
 
+        this.health = 2;
+        this.damage = 3;
+
         this.setSprite(
             new Graphics()
                 .rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y)
@@ -24,16 +29,17 @@ export class Chaser extends EnemyShip {
         console.log("Chaser Spawned");
     }
 
-    public onCollision(type: CollisionType, other?: ICollideable): void {
-        super.onCollision(type, other);
+    public onCollision(type: CollisionType, otherCollideable: ICollideable): void {
+        super.onCollision(type, otherCollideable);
 
         switch(type){
             case CollisionType.Player:
+                if(InterfaceHelper.isDamageable(otherCollideable))
+                    otherCollideable.onDamageTaken(this.damage);
+
                 this.destroy();
                 console.log("Collision with player");
                 break;
         }
-    }
-
-    
+    }    
 }

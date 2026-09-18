@@ -6,8 +6,9 @@ import type { IProjectile } from "../Interfaces/IProjectile";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { collisionHelpers } from "../Collision/CollisionHelpers";
 import { CollisionType } from "../Collision/CollisionType";
+import type { IDamageDealer } from "../Interfaces/IDamageDealer";
 
-export class CanonBall extends Entity implements IProjectile, ICollideable{
+export class CanonBall extends Entity implements IProjectile, ICollideable, IDamageDealer{
     
     //collision stuff
     colliderSize: Point = new Point(15,15);
@@ -20,9 +21,13 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
     timeout : number = 2; //secs
     currentLifetime : number = 0;
 
-    constructor(newPosition: Point, rotation : number, size? : Point) {
+    damage: number;
+
+    constructor(newPosition: Point, rotation : number, damage : number, size? : Point) {
         super(newPosition, rotation, size);
-    
+        
+        this.damage = damage;
+
         this.setSprite(new Graphics().rect(this.center.x, this.center.y, this.colliderSize.x, this.colliderSize.y).fill(0xFFFF00));
 
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this); //world will listen and update accordingly
@@ -58,6 +63,16 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
 
     onCollision(type : CollisionType, other?: ICollideable): void {
         //console.log("collision!!");
-        this.destroy();
+        switch(type){
+            case CollisionType.Projectile:
+            //ignore
+            break;
+            default:
+                this.destroy();
+            break;
+
+        }
+
+        
     }
 }

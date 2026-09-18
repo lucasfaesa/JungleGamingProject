@@ -7,8 +7,12 @@ import { CollisionType } from "../Collision/CollisionType";
 import { collisionHelpers } from "../Collision/CollisionHelpers";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
+import type { IDamageable } from "../Interfaces/IDamageable";
+import type { IDamageDealer } from "../Interfaces/IDamageDealer";
+import { CanonBall } from "../projectile/CanonBall";
+import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
-export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICollideable {
+export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICollideable, IDamageable, IDamageDealer{
     
     protected graphicSize: Point = new Point(50, 50);
     public moveSpeed: number = 100;
@@ -22,6 +26,12 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
     
     protected previousPosition: Point = new Point();
     protected previousRotation: number = 0;
+    
+    //health
+    health: number = 10;
+    isAlive: boolean = true;
+    //damage
+    damage: number = 1;
 
     constructor(newPosition: Point, rotation: number = 0) {
         super(newPosition, rotation);
@@ -31,17 +41,23 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         // Register to collision system
         eventHub.trigger(GameEvents.COLLIDEABLE_INSTANTIATED, this);
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this);
-    }
-    
+    }    
     
     public getCollisionPoints(): Point[] {
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);
     }
 
-    public onCollision(type: CollisionType, other?: ICollideable): void {
+    public onCollision(type: CollisionType, otherCollideable : ICollideable): void {
         switch (type) {
             case CollisionType.Island:
                 this.onCollidedWithIsland();
+                break;
+            case CollisionType.Projectile:
+                console.log("projectile collision with ship, other collideable:");
+
+                if(InterfaceHelper.isDamageDealer(otherCollideable)){ //checking if other collideble implements IdamageDealer
+                    this.onDamageTaken(otherCollideable.damage);
+                }
                 break;
         }
     }
@@ -79,8 +95,21 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         // To be implemented on child classes
     }
 
+    onDamageTaken(damage: number): void {
+        this.health -= damage;
+
+        console.log("Damage taken, current health: " + this.health);
+
+        if(this.health <= 0){
+            this.health = 0;
+            this.isAlive = false;
+            this.destroy();
+        }
+    }
+
     public destroy(): void {
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this);
         eventHub.trigger(GameEvents.UPDATEABLE_DESPAWNED, this);
+        eventHub.trigger(GameEvents.PLAYER_DIED);
     }
 }

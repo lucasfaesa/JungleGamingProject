@@ -9,5 +9,5 @@ export interface ICollideable{
     collisionLayer : CollisionType;
 
     getCollisionPoints(): Point[];
-    onCollision(type: CollisionType, other?: ICollideable) : void;
+    onCollision(type: CollisionType, otherCollideable?: ICollideable) : void;
 }
