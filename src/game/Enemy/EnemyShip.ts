@@ -87,6 +87,10 @@ export abstract class EnemyShip extends Ship {
         return Math.atan2(forceX, -forceY);
     }
 
+    protected onCollidedWithIsland(): void {
+        //enemy ships avoid island but dont collide anymore, much better, avoids some annoying things
+    }
+
     // shortest signed rotation from current heading to targetAngle
     protected angleDiff(targetAngle: number): number {
         let diff = targetAngle - this.rotation;

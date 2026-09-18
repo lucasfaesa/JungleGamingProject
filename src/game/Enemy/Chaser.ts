@@ -5,14 +5,14 @@ import type { TilemapData } from "../Map/TilemapData";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
+import { RandomHelper } from "../Helpers/RandomHelper";
 
 export class Chaser extends EnemyShip {
 
     constructor(newPosition: Point, player: Player, tilemapData: TilemapData) {
         super(newPosition, player, tilemapData);
 
-
-        this.moveSpeed = 120;
+        this.moveSpeed = RandomHelper.randomInt(110, 120);
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Enemy; 
         this.ignoredCollisionLayers = [CollisionType.EnemyProjectile, CollisionType.Enemy];

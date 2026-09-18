@@ -9,6 +9,7 @@ import type { Player } from "../Player/Player";
 import type { TilemapData } from "../Map/TilemapData";
 import type { TileMap } from "../Map/TileMap";
 import type { IUpdateable } from "../Interfaces/IUpdateable";
+import { RandomHelper } from "../Helpers/RandomHelper";
 
 export class Spawner implements IUpdateable {
     
@@ -82,9 +83,8 @@ export class Spawner implements IUpdateable {
     }
 
     private spawnRandomEnemy(position : Point){
-        const randomNumber : number = Math.floor(Math.random() * this.maxSpawnChances + 1); //0 to 10
-        console.log("random number was: " + randomNumber);
-
+        const randomNumber : number = RandomHelper.randomInt(0, 10);
+        
         let enemy : EnemyShip;
 
         if(randomNumber <= this.chaserSpawnChance){

@@ -8,6 +8,7 @@ import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { Canon } from "../projectile/Canon";
 import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
+import { RandomHelper } from "../Helpers/RandomHelper";
 
 export class Shooter extends EnemyShip implements IShooter{
     
@@ -15,7 +16,7 @@ export class Shooter extends EnemyShip implements IShooter{
     private shotDelay : number = 1.1;
     private timerToStartMovingAgain : number = 1.5;
 
-    protected repulsionRadius: number = 2.5;
+    protected repulsionRadius: number = 2;
 
     private frontCanon : Canon;
     private tileMap : TileMap;
@@ -27,7 +28,7 @@ export class Shooter extends EnemyShip implements IShooter{
         super(newPosition, player, tilemapData);
 
         this.tileMap = tileMap;
-        this.moveSpeed = 120;
+        this.moveSpeed = RandomHelper.randomInt(100, 120);
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Enemy; 
         this.canMove = false;
