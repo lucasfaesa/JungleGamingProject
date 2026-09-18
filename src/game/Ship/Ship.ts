@@ -47,7 +47,7 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);
     }
 
-    public onCollision(type: CollisionType, otherCollideable : ICollideable): void {
+    public onCollision(type: CollisionType, otherCollideable? : ICollideable): void {
         switch (type) {
             case CollisionType.Island:
                 this.onCollidedWithIsland();
@@ -107,9 +107,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         }
     }
 
-    public destroy(): void {
+    protected destroy(): void {
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this);
         eventHub.trigger(GameEvents.UPDATEABLE_DESPAWNED, this);
-        eventHub.trigger(GameEvents.PLAYER_DIED);
     }
 }

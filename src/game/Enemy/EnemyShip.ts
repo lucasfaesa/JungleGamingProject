@@ -27,6 +27,9 @@ export abstract class EnemyShip extends Ship {
     public update(deltaTime: number): void {
         super.update(deltaTime);
 
+        if(!this.targetPlayer.isAlive)
+            return;
+
         const steeringAngle = this.computeSteeringAngle();
 
         // repulsion only matters while navigating; when stopped, aim straight at the player

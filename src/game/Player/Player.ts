@@ -5,6 +5,8 @@ import type { IShooter } from "../Interfaces/IShooter";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { Chaser } from "../Enemy/Chaser";
+import { eventHub } from "../Event/EventHub";
+import { GameEvents } from "../Event/GameEvents";
 
 export class Player extends Ship implements IShooter {
     private frontCanon: Canon;
@@ -57,5 +59,10 @@ export class Player extends Ship implements IShooter {
 
     onDamageTaken(damage: number): void {
         super.onDamageTaken(damage);
+    }
+
+    protected destroy(): void {
+        super.destroy();
+        eventHub.trigger(GameEvents.PLAYER_DIED);
     }
 }

@@ -50,6 +50,9 @@ export class Shooter extends EnemyShip implements IShooter{
     public update(deltaTime: number): void {
         super.update(deltaTime);
 
+        if(!this.targetPlayer.isAlive)
+            return;
+
         //ignores islands
         const inRangeToShootPlayer = this.getDistanceToPlayer() <= this.stopDistance;
 

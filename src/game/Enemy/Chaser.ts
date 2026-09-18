@@ -4,7 +4,6 @@ import { EnemyShip } from "./EnemyShip";
 import type { TilemapData } from "../Map/TilemapData";
 import { CollisionType } from "../Collision/CollisionType";
 import type { ICollideable } from "../Interfaces/ICollideable";
-import type { IDamageable } from "../Interfaces/IDamageable";
 import { InterfaceHelper } from "../Interfaces/InterfaceHelper";
 
 export class Chaser extends EnemyShip {
