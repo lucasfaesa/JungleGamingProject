@@ -5,7 +5,7 @@ export const GameState = {  InitialCountdown: 'InitialCountdown',  Playing: 'Pla
 export type GameState = typeof GameState[keyof typeof GameState];
 
 export class GameManager {
-    private readonly matchTime : number = 10;
+    private readonly matchTime : number = 60;
     private readonly initialCountdown : number = 3;
 
     public currentState: GameState = GameState.InitialCountdown;
@@ -44,7 +44,7 @@ export class GameManager {
 
             case GameState.Playing:
                 this.currentMatchTime -= deltaTime;
-                console.log("countdown: " + this.currentMatchTime);
+                //console.log("countdown: " + this.currentMatchTime);
                 if(this.currentMatchTime <= 0){
                     this.currentMatchTime = 0;
                     this.changeState(GameState.Victory);

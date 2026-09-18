@@ -14,9 +14,8 @@ export class Shooter extends EnemyShip implements IShooter{
     private stopDistance : number = 300;
     private shotDelay : number = 1.1;
     private timerToStartMovingAgain : number = 1.5;
-    private aimTolerance : number = 0.15;
 
-    protected repulsionRadius: number = 3;
+    protected repulsionRadius: number = 2.5;
 
     private frontCanon : Canon;
     private tileMap : TileMap;
