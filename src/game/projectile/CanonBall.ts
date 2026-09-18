@@ -5,7 +5,7 @@ import { GameEvents } from "../Event/GameEvents";
 import type { IProjectile } from "../Interfaces/IProjectile";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import { collisionHelpers } from "../Collision/CollisionHelpers";
-import type { CollisionType } from "../Collision/CollisionType";
+import { CollisionType } from "../Collision/CollisionType";
 
 export class CanonBall extends Entity implements IProjectile, ICollideable{
     
@@ -13,6 +13,7 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
     colliderSize: Point = new Point(15,15);
     halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2);
     center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
+    collisionLayer: CollisionType = CollisionType.Projectile;
 
     protected graphicSize: Point = new Point(15,15);
     speed: number = 250;
@@ -27,6 +28,7 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this); //world will listen and update accordingly
         eventHub.trigger(GameEvents.COLLIDEABLE_INSTANTIATED, this); //Collision manager will listen and do its own thing
     }
+    
     
     getCollisionPoints(): Point[] {
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);

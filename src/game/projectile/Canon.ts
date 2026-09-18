@@ -22,7 +22,13 @@ export class Canon extends Entity implements IShooter {
         const globalPos = this.getGlobalPosition();
         const globalRotation = Math.atan2(this.worldTransform.b, this.worldTransform.a);
 
-        const canonBall : CanonBall = new CanonBall(new Point(globalPos.x, globalPos.y), globalRotation);
+        const spawnOffset : number = 30;
+
+        const spawnPosX = globalPos.x + spawnOffset * Math.sin(globalRotation);
+        const spawnPosY = globalPos.y - spawnOffset * Math.cos(globalRotation);
+
+
+        const canonBall : CanonBall = new CanonBall(new Point(spawnPosX, spawnPosY), globalRotation);
     }
     
 }
