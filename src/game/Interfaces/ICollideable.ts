@@ -1,11 +1,12 @@
 import type { Point } from "pixi.js";
+import type { CollisionType } from "../Collision/CollisionType";
 
 export interface ICollideable{
     position: Point;
-    size : Point;
+    colliderSize : Point;
     halfSize : Point;
     center: Point;
 
     getCollisionPoints(): Point[];
-    onCollision(other?: ICollideable) : void;
+    onCollision(type: CollisionType, other?: ICollideable) : void;
 }

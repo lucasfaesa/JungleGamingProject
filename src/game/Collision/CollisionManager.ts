@@ -4,6 +4,7 @@ import { GameEvents } from "../Event/GameEvents";
 import type { ICollideable } from "../Interfaces/ICollideable";
 import type { IUpdateable } from "../Interfaces/IUpdateable";
 import type { TileMap } from "../Map/TileMap";
+import { CollisionType } from "./CollisionType";
 
 export class CollisionManager implements IUpdateable {
     
@@ -56,7 +57,7 @@ export class CollisionManager implements IUpdateable {
 
             for(let j = 0; j < points.length; j++){
                 if(this.tileMap.isSolidAt(points[j].x, points[j].y)){
-                    collideable.onCollision();
+                    collideable.onCollision(CollisionType.Island);
                     break;
                 }
             }
