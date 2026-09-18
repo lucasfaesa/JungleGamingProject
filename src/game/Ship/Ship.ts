@@ -47,11 +47,18 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
     }
 
     protected onCollidedWithIsland(){
+        this.rollbackMovement();
+    }
+
+    protected onCollidedWithShip(){
+        this.rollbackMovement();
+    }
+
+    private rollbackMovement(){
         // rollback to last safe frame position
         this.position.copyFrom(this.previousPosition);
         this.rotation = this.previousRotation;
     }
-
 
     public moveVertical(deltaTime: number, negativeInput: boolean): void {
         this.previousPosition.copyFrom(this.position);

@@ -3,6 +3,7 @@ import { Ship } from "../Ship/Ship";
 import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";
 import { CollisionType } from "../Collision/CollisionType";
+import type { ICollideable } from "../Interfaces/ICollideable";
 
 export class Player extends Ship implements IShooter {
     private frontCanon: Canon;
@@ -37,5 +38,14 @@ export class Player extends Ship implements IShooter {
 
     public shoot(): void {
         this.frontCanon.shoot();
+    }
+
+    public onCollision(type: CollisionType, other?: ICollideable): void {
+        super.onCollision(type, other);
+        
+        switch(type){
+            case CollisionType.Enemy:
+                this.onCollidedWithShip();
+        }
     }
 }
