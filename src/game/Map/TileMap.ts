@@ -45,4 +45,30 @@ export class TileMap extends Container {
 
         return TileInfo.getTile(tileId).isSolid;
     }
+
+    /**
+     * Checks if there is an unobstructed line of sight between two world positions.
+     * Steps in increments (32px) from start to end, checking if any step hits a solid tile.
+     */
+    public hasLineOfSight(x1: number, y1: number, x2: number, y2: number): boolean {
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Half tile size ensures no solid tile is skipped during the raycast
+        const stepSize = 32;
+        const steps = Math.floor(distance / stepSize);
+
+        for (let i = 1; i < steps; i++) {
+            const t = i / steps;
+            const checkX = x1 + dx * t;
+            const checkY = y1 + dy * t;
+
+            if (this.isSolidAt(checkX, checkY)) {
+                return false; // View is blocked by an obstacle
+            }
+        }
+
+        return true; // Clear line of sight
+    }
 }

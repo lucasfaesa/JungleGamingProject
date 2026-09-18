@@ -66,7 +66,7 @@ export class World{
         //const chaser = new Chaser(position, this.player, this.tilemapData);
         //this.spawnUpdateable(chaser);
 
-        const shooter = new Shooter(position, this.player, this.tilemapData);
+        const shooter = new Shooter(position, this.player, this.tilemapData, this.tileMap);
         this.spawnUpdateable(shooter);
     }
 

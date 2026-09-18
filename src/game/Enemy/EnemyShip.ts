@@ -13,7 +13,7 @@ export abstract class EnemyShip extends Ship {
     protected canMove : boolean = true;
 
     // Radius (in tiles) around the enemy that generates repulsion
-    private readonly repulsionRadius: number = 1;
+    protected readonly repulsionRadius: number = 1;
     // How strongly repulsion weighs against attraction to the player
     private readonly repulsionStrength: number = 6000;
 
@@ -27,13 +27,15 @@ export abstract class EnemyShip extends Ship {
     public update(deltaTime: number): void {
         super.update(deltaTime);
 
-        const desiredAngle = this.computeSteeringAngle();
-        
+        const steeringAngle = this.computeSteeringAngle();
+
+        // repulsion only matters while navigating; when stopped, aim straight at the player
         if(this.canTurn){
-            this.faceDirection(desiredAngle, deltaTime);
+            this.faceDirection(this.canMove ? steeringAngle : this.getAngleToPlayer(), deltaTime);
         }
 
-        if(this.canMove)
+        // never thrust while pointing away from where steering wants to go, or it rams the island
+        if(this.canMove && Math.abs(this.angleDiff(steeringAngle)) < Math.PI / 2)
             this.moveVertical(deltaTime, false);
     }
 
@@ -82,15 +84,27 @@ export abstract class EnemyShip extends Ship {
         return Math.atan2(forceX, -forceY);
     }
 
-    // turn slowly in direction of target, chooses which is best, to turn right or left
-    private faceDirection(targetAngle: number, deltaTime: number): void {
+    // shortest signed rotation from current heading to targetAngle
+    protected angleDiff(targetAngle: number): number {
         let diff = targetAngle - this.rotation;
         while (diff < -Math.PI) diff += Math.PI * 2;
         while (diff > Math.PI) diff -= Math.PI * 2;
+        return diff;
+    }
+
+    // turn slowly in direction of target, chooses which is best, to turn right or left
+    protected faceDirection(targetAngle: number, deltaTime: number): void {
+        const diff = this.angleDiff(targetAngle);
 
         if (Math.abs(diff) < 0.02) return;
 
         this.rotate(deltaTime, diff < 0);
+    }
+
+    protected getAngleToPlayer(): number {
+        const dx = this.targetPlayer.position.x - this.position.x;
+        const dy = this.targetPlayer.position.y - this.position.y;
+        return Math.atan2(dx, -dy);
     }
 
     protected getDistanceToPlayer() : number {
