@@ -17,7 +17,7 @@ export class Canon extends Entity implements IShooter {
 
     shoot(): void {
 
-        console.log("Canonball instantiated");
+        //console.log("Canonball instantiated");
 
         const globalPos = this.getGlobalPosition();
         const globalRotation = Math.atan2(this.worldTransform.b, this.worldTransform.a);

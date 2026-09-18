@@ -30,7 +30,7 @@ export class CollisionManager implements IUpdateable {
         const collideable = data as ICollideable;
         this.collideables.push(collideable);
 
-        console.log("Collideable Instantiated");
+        //console.log("Collideable Instantiated");
     }
 
     public OnCollideableDespawned(data? : unknown){
@@ -41,7 +41,7 @@ export class CollisionManager implements IUpdateable {
             this.collideables.splice(index, 1);
         }
 
-        console.log("Collideable Despawned");
+       // console.log("Collideable Despawned");
     }
 
     public update() {

@@ -40,7 +40,7 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
         this.currentLifetime += deltaTime;
 
         if(this.currentLifetime >= this.timeout){
-            console.log("canonball timed out")
+            //console.log("canonball timed out")
             this.destroy();
         }
     }
@@ -51,13 +51,13 @@ export class CanonBall extends Entity implements IProjectile, ICollideable{
     }
 
     destroy(){
-        console.log("canonball destroyed");
+        //console.log("canonball destroyed");
         eventHub.trigger(GameEvents.UPDATEABLE_DESPAWNED, this); //world will listen and update accordingly
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this); //Collision manager will listen and do its own thing
     }
 
     onCollision(type : CollisionType, other?: ICollideable): void {
-        console.log("collision!!");
+        //console.log("collision!!");
         this.destroy();
     }
 }
