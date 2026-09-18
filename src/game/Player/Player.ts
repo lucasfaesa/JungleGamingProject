@@ -31,15 +31,11 @@ export class Player extends Ship implements IShooter {
         this.addChild(this.rightCanon);
     }
 
-    public shootForward(): void {
-        this.frontCanon.shoot();
-    }
-
     public shootSideways(rightSide: boolean): void {
         rightSide ? this.rightCanon.shoot() : this.leftCanon.shoot();
     }
 
     public shoot(): void {
-        this.shootForward(); //redundant, yeah...
+        this.frontCanon.shoot();
     }
 }

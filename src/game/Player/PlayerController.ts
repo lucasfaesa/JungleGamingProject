@@ -25,7 +25,7 @@ export class PlayerController implements IUpdateable{
             this.player.rotate(deltaTime, true);
 
         if(this.inputManager.tryConsumeAction(this.inputManager.shootForwardAction))
-            this.player.shootForward();
+            this.player.shoot();
         if(this.inputManager.tryConsumeAction(this.inputManager.shootLeftAction))
             this.player.shootSideways(false);
         if(this.inputManager.tryConsumeAction(this.inputManager.shootRightAction))
