@@ -6,13 +6,15 @@ import { GameEvents } from "../Event/GameEvents";
 import { Player } from "../Player/Player";
 import { TileMap } from "../Map/TileMap";
 import { TilemapData } from "../Map/TilemapData";
+import { CollisionManager } from "../Collision/CollisionManager";
 
 //controls anything related to the world
 export class World{
 
     private stage : Container;
     private updateables : IUpdateable [] = [];
-    private tileMap : TileMap;
+    private tileMap! : TileMap;
+    private collisionManager! : CollisionManager;
 
     private readonly onUpdateableInstantiated = (data?: unknown) => this.OnUpdateableInstantiated(data);
     private readonly onUpdateableDespawned    = (data?: unknown) => this.OnUpdateableDespawned(data);
@@ -21,6 +23,7 @@ export class World{
         this.stage = stage;
 
         this.generateTiles();
+        this.activateCollisions();
 
         eventHub.subscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.subscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
@@ -29,6 +32,8 @@ export class World{
     public destroy(){
         eventHub.unsubscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.unsubscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
+
+        this.collisionManager?.destroy();
     }
 
     public update(deltaTime: number): void {
@@ -36,6 +41,7 @@ export class World{
         for (let i = this.updateables.length - 1; i >= 0; i--) {
             this.updateables[i].update(deltaTime);
         }
+
     }
 
     public spawnPlayer(position : Point) : Player {
@@ -48,6 +54,11 @@ export class World{
         const tilemapData: TilemapData = new TilemapData();
         this.tileMap = new TileMap(tilemapData);
         this.stage.addChild(this.tileMap);
+    }
+
+    private activateCollisions(){
+        this.collisionManager = new CollisionManager(this.tileMap);
+        this.updateables.push(this.collisionManager);
     }
 
     private spawnUpdateable(objectToSpawn : ISpawneable){
@@ -67,15 +78,11 @@ export class World{
     private OnUpdateableInstantiated(data? : unknown){
         const spawneable = data as ISpawneable;
         this.spawnUpdateable(spawneable);
-
-        console.log("Called instantiation");
     }
 
     private OnUpdateableDespawned(data? : unknown){
         const spawneable = data as ISpawneable;
         this.destroySpawnedUpdateable(spawneable);
-
-        console.log("Called destruction");
     }
 
 
