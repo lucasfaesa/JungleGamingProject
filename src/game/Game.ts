@@ -7,7 +7,7 @@ import { World } from "./World/World";
 /*
   Game (GameManager / Engine Coordinator)
  
-  coordinates engine initialization (PixiJS), scene lifecycles, entities, and the main update loop (Update).
+  coordinates engine initialization (PixiJS), scene lifecycles, and the main update loop (sometimes, now delegated to World).
  */
 export class Game {
   private app: Application | null = null;
@@ -16,8 +16,8 @@ export class Game {
   private player: Player | null = null;
   private playerController : PlayerController | null = null;
   private world : World | null = null;
-  private screenWidth = 800;
-  private screenHeight = 600;
+  private readonly screenWidth = 1280;
+  private readonly screenHeight = 768;
   private backgroundColor = 0x1099bb;
   private inputManager : InputManager;
 
@@ -63,7 +63,7 @@ export class Game {
 
     //creating world, player and assigning it to the controller
     this.world = new World(this.app.stage);
-    const player : Player = this.world.spawnPlayer(new Point(400,300));
+    const player : Player = this.world.spawnPlayer(new Point(250,600));
     this.playerController = new PlayerController(player, this.inputManager);
   }
 
