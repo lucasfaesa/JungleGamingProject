@@ -6,13 +6,14 @@ export class Entity extends Container{
     
     private sprite: Graphics | null = null;
 
-    //sprite is optional "?", if not assigned, we use a red square
-    constructor(newPosition: Point, rotation : number = 0, newSprite?: Graphics | null) {
+    protected graphicSize : Point = new Point(10,10);
+
+    //size is optional, as the objet can declare its size
+    constructor(newPosition: Point, rotation : number = 0, size? : Point) {
         super();
 
-        //centering the anchor of the graphics "-25, -25"
-        const graphic = newSprite ?? new Graphics().rect(-25, -25, 50, 50).fill(0xff0000);
-        this.setSprite(graphic);
+        if(size != null)
+            this.graphicSize = size;
 
         this.position.copyFrom(newPosition);
         this.rotation = rotation;

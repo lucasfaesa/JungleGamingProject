@@ -50,7 +50,7 @@ export class Game {
 
       // Game loop: like Unity's Update() running each frame
       this.app.ticker.add((ticker) => {
-        this.update(ticker.deltaTime);
+        this.update(ticker.deltaMS/1000); //now seconds just like unity, was being frame
       });
     })();
 
