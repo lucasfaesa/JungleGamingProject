@@ -1,0 +1,88 @@
+import { type Point } from "pixi.js";
+import { Ship } from "../Ship/Ship";
+import type { Player } from "../Player/Player";
+import type { TilemapData } from "../Map/TilemapData";
+
+export abstract class EnemyShip extends Ship {
+
+    protected targetPlayer: Player;
+
+    private tilemapData: TilemapData;
+
+    // Radius (in tiles) around the enemy that generates repulsion
+    private readonly repulsionRadius: number = 1;
+    // How strongly repulsion weighs against attraction to the player
+    private readonly repulsionStrength: number = 6000;
+
+    constructor(newPosition: Point, player: Player, tilemapData: TilemapData) {
+        super(newPosition, 0);
+
+        this.targetPlayer = player;
+        this.tilemapData = tilemapData;
+    }
+
+    public update(deltaTime: number): void {
+        super.update(deltaTime);
+
+        const desiredAngle = this.computeSteeringAngle();
+        this.faceDirection(desiredAngle, deltaTime);
+
+        this.moveVertical(deltaTime, false);
+    }
+
+    //calculates the correct angle based on player attraction + repulsion of islands
+    //the closer to the island, more it wants to turn away from it
+    private computeSteeringAngle(): number {
+
+        // attraction force: normalized vector pointing toward the player
+        const dx = this.targetPlayer.position.x - this.position.x;
+        const dy = this.targetPlayer.position.y - this.position.y;
+        const distToPlayer = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        let forceX = dx / distToPlayer;
+        let forceY = dy / distToPlayer;
+
+        // repulsion force: sum vectors away from each nearby island tile
+        const tileW = this.tilemapData.tile_width;
+        const tileH = this.tilemapData.tile_height;
+
+        const myCol = Math.floor(this.position.x / tileW);
+        const myRow = Math.floor(this.position.y / tileH);
+
+        for (let row = myRow - this.repulsionRadius; row <= myRow + this.repulsionRadius; row++) {
+            for (let col = myCol - this.repulsionRadius; col <= myCol + this.repulsionRadius; col++) {
+                const tile = this.tilemapData.getTileAt(col, row);
+                if (tile === null || tile === 0) 
+                    continue; // island tiles only
+
+                // Center of the tile in world pixels
+                const tileCx = (col + 0.5) * tileW;
+                const tileCy = (row + 0.5) * tileH;
+
+                const repX = this.position.x - tileCx;
+                const repY = this.position.y - tileCy;
+                const distSq = repX * repX + repY * repY || 1;
+                const dist = Math.sqrt(distSq);
+
+                // Repulsion scales with 1/dist² and is normalized by distance
+                const strength = this.repulsionStrength / distSq;
+                forceX += (repX / dist) * strength;
+                forceY += (repY / dist) * strength;
+            }
+        }
+
+        // Convert the resulting force vector into an angle
+        return Math.atan2(forceX, -forceY);
+    }
+
+    // turn slowly in direction of target, chooses which is best, to turn right or left
+    private faceDirection(targetAngle: number, deltaTime: number): void {
+        let diff = targetAngle - this.rotation;
+        while (diff < -Math.PI) diff += Math.PI * 2;
+        while (diff > Math.PI) diff -= Math.PI * 2;
+
+        if (Math.abs(diff) < 0.02) return;
+
+        this.rotate(deltaTime, diff < 0);
+    }
+}
