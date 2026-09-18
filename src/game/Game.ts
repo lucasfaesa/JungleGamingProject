@@ -63,8 +63,7 @@ export class Game {
 
     //creating world, player and assigning it to the controller
     this.world = new World(this.app.stage);
-    const player : Player = this.world.spawnPlayer(new Point(250,600));
-    this.playerController = new PlayerController(player, this.inputManager);
+    this.playerController = new PlayerController(this.world.getPlayer(), this.inputManager);
   }
 
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime

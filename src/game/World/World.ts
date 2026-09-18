@@ -1,4 +1,4 @@
-import type { Container, Point } from "pixi.js";
+import { Point, type Container } from "pixi.js";
 import type { IUpdateable } from "../Interfaces/IUpdateable";
 import type { ISpawneable } from "../Interfaces/ISpawneable";
 import { eventHub } from "../Event/EventHub";
@@ -7,10 +7,13 @@ import { Player } from "../Player/Player";
 import { TileMap } from "../Map/TileMap";
 import { TilemapData } from "../Map/TilemapData";
 import { CollisionManager } from "../Collision/CollisionManager";
+import type { Ship } from "../Ship/Ship";
+import { Chaser } from "../Enemy/Chaser";
 
 //controls anything related to the world
 export class World{
 
+    private player : Player;
     private stage : Container;
     private updateables : IUpdateable [] = [];
     private tileMap! : TileMap;
@@ -24,6 +27,9 @@ export class World{
 
         this.generateTiles();
         this.activateCollisions();
+
+        this.player = this.spawnPlayer(new Point(250,600));
+        this.spawnEnemy(new Point(500,100));
 
         eventHub.subscribe(GameEvents.UPDATEABLE_INSTANTIATED, this.onUpdateableInstantiated);
         eventHub.subscribe(GameEvents.UPDATEABLE_DESPAWNED, this.onUpdateableDespawned);
@@ -44,10 +50,19 @@ export class World{
 
     }
 
-    public spawnPlayer(position : Point) : Player {
+    public getPlayer() : Player {
+        return this.player;
+    }
+
+    private spawnPlayer(position : Point) : Player {
         const player = new Player(position);
         this.spawnUpdateable(player);
         return player;
+    }
+
+    private spawnEnemy(position: Point){
+        const chaser = new Chaser(position, this.player);
+        this.spawnUpdateable(chaser);
     }
 
     private generateTiles(){

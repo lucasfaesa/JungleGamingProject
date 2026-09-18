@@ -45,8 +45,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
 
     protected onCollidedWithIsland(): void {
         // rollback to last safe frame position
-        this.position.copyFrom(this.previousPosition);
-        this.rotation = this.previousRotation;
+        //this.position.copyFrom(this.previousPosition);
+        //this.rotation = this.previousRotation;
     }
 
     public moveVertical(deltaTime: number, negativeInput: boolean): void {
