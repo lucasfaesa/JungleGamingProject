@@ -1,4 +1,4 @@
-import { Assets, Container, Graphics, TilingSprite } from "pixi.js";
+import { Assets, Container, Sprite, TilingSprite } from "pixi.js";
 import { TilemapData } from "./TilemapData";
 import { TileInfo, TileType } from "./Tileset";
 import type { IUpdateable } from "../Interfaces/IUpdateable";
@@ -51,15 +51,50 @@ export class TileMap extends Container implements IUpdateable {
                     continue;
                 }
 
-                const tileGraphic = new Graphics()
-                    .rect(0, 0, this.tilemapData.tile_width, this.tilemapData.tile_height)
-                    .fill(tileDef.color);
+                const tileAlias = this.getIslandTileAlias(col, row);
+                const tileSprite = Sprite.from(tileAlias);
 
-                tileGraphic.position.set(col * this.tilemapData.tile_width, row * this.tilemapData.tile_height);
+                tileSprite.width = this.tilemapData.tile_width;
+                tileSprite.height = this.tilemapData.tile_height;
+                tileSprite.position.set(col * this.tilemapData.tile_width, row * this.tilemapData.tile_height);
 
-                this.addChild(tileGraphic);
+                this.addChild(tileSprite);
             }
         }
+    }
+
+    //auto assign island sprites based on their neighbours
+    private getIslandTileAlias(col: number, row: number): string {
+        const isNorth = this.isSand(col, row - 1);
+        const isSouth = this.isSand(col, row + 1);
+        const isWest  = this.isSand(col - 1, row);
+        const isEast  = this.isSand(col + 1, row);
+
+        // Top edge
+        if (!isNorth && isSouth) {
+            if (!isWest && isEast) return "islandTopLeft";
+            if (isWest && !isEast) return "islandTopRight";
+            return "islandTopMiddle";
+        }
+
+        // Bottom edge
+        if (isNorth && !isSouth) {
+            if (!isWest && isEast) return "islandBottomLeft";
+            if (isWest && !isEast) return "islandBottomRight";
+            return "islandMiddleBottom";
+        }
+
+        // Vertical middle edges
+        if (!isWest && isEast) return "islandMiddleLeft";
+        if (isWest && !isEast) return "islandMiddleRight";
+
+        // Center
+        return "islandCenter";
+    }
+
+    private isSand(col: number, row: number): boolean {
+        const tile = this.tilemapData.getTileAt(col, row);
+        return tile === TileType.Sand;
     }
 
     public isSolidAt(worldX: number, worldY: number): boolean {

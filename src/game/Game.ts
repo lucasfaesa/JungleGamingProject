@@ -60,6 +60,15 @@ export class Game {
         { alias: "canonBall", src: "/assets/projectiles/canonBall.png" },
         { alias: "cannon", src: "/assets/props/cannon.png" },
         { alias: "water", src: "/assets/tiles/water.png" },
+        { alias: "islandMiddleLeft", src: "/assets/tiles/islandMiddleLeft.png" },
+        { alias: "islandBottomLeft", src: "/assets/tiles/islandBottomLeft.png" },
+        { alias: "islandTopLeft", src: "/assets/tiles/islandTopLeft.png" },
+        { alias: "islandMiddleRight", src: "/assets/tiles/islandMiddleRight.png" },
+        { alias: "islandTopRight", src: "/assets/tiles/islandTopRight.png" },
+        { alias: "islandBottomRight", src: "/assets/tiles/islandBottomRight.png" },
+        { alias: "islandCenter", src: "/assets/tiles/islandCenter.png" },
+        { alias: "islandTopMiddle", src: "/assets/tiles/islandTopMiddle.png" },
+        { alias: "islandMiddleBottom", src: "/assets/tiles/islandMiddleBottom.png" },
       ]);
       
       this.start();
