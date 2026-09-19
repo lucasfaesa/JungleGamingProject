@@ -41,7 +41,7 @@ A 2D naval top-down shooter challenge developed for **Jungle Gaming** within a 2
 git clone https://github.com/lucasfaesa/JungleGamingProject.git
 
 # Navigate to project directory
-cd pirate-battle
+cd JungleGamingProject/pirate-battle
 
 # Install dependencies
 npm install
