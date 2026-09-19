@@ -1,4 +1,4 @@
-import { Graphics, Point } from "pixi.js";
+import { Point } from "pixi.js";
 import { Entity } from "../Entities/Entity";
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
@@ -64,7 +64,7 @@ export class CanonBall extends Entity implements IProjectile, ICollideable, IDam
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this); //Collision manager will listen and do its own thing
     }
 
-    onCollision(type : CollisionType, other?: ICollideable): void {
+    onCollision(type : CollisionType, _other?: ICollideable): void {
         //console.log("collision!!");
         switch(type){
             case CollisionType.PlayerProjectile:

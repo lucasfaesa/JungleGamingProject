@@ -71,7 +71,7 @@ export class PlayerController implements IUpdateable{
             this.player.shootSideways(true);
     }
 
-    private OnPlayerDied(data? : unknown){
+    private OnPlayerDied(_data? : unknown){
         console.log("player died");
         this.canUpdate = false;
     }

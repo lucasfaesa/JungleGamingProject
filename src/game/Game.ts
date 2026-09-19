@@ -1,6 +1,5 @@
-import { Application, Assets, Point } from "pixi.js";
+import { Application, Assets } from "pixi.js";
 import { InputManager } from "./input/InputManager";
-import { Player } from "./Player/Player";
 import { PlayerController } from "./Player/PlayerController";
 import { World } from "./World/World";
 import { GameManager } from "./GameFlow/GameManager";

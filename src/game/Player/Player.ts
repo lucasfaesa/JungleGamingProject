@@ -1,4 +1,4 @@
-import { Point, Graphics, DEG_TO_RAD, Sprite } from "pixi.js";
+import { Point, DEG_TO_RAD } from "pixi.js";
 import { Ship } from "../Ship/Ship";
 import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";

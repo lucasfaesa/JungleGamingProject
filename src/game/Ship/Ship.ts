@@ -1,4 +1,4 @@
-import { Point, Sprite } from "pixi.js";
+import { Point } from "pixi.js";
 import { Entity } from "../Entities/Entity";
 import type { IMoveable } from "../Interfaces/IMoveable";
 import type { ISpawneable } from "../Interfaces/ISpawneable";
@@ -59,7 +59,7 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);
     }
 
-    public onCollision(type: CollisionType, otherCollideable? : ICollideable): void {
+    public onCollision(type: CollisionType, _otherCollideable? : ICollideable): void {
         switch (type) {
             case CollisionType.Island:
                 this.onCollidedWithIsland();
@@ -96,7 +96,7 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         this.rotation += side * this.rotationSpeed * deltaTime;
     }
 
-    public update(deltaTime: number): void {
+    public update(_deltaTime: number): void {
         // To be implemented on child classes
     }
 

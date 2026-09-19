@@ -36,13 +36,13 @@ export class GameManager {
         eventHub.unsubscribe(GameEvents.ENEMY_DIED,  this.onEnemyDied);
     }
 
-    private OnPlayerDied (data?: unknown) {
+    private OnPlayerDied (_data?: unknown) {
         if (this.currentState === GameState.Playing) {
             this.changeState(GameState.Loss);
         }
     };
 
-    private OnEnemyDied (data?: unknown) {
+    private OnEnemyDied (_data?: unknown) {
         if (this.currentState !== GameState.Playing)  //ignore if not playing, because at the end everyone is destroyed
             return;
 

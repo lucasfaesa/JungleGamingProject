@@ -1,4 +1,4 @@
-import { Graphics, Point } from "pixi.js";
+import { Point } from "pixi.js";
 import type { IShooter } from "../Interfaces/IShooter";
 import { EnemyShip } from "./EnemyShip";
 import type { TilemapData } from "../Map/TilemapData";

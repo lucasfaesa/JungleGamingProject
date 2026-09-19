@@ -1,7 +1,7 @@
 import { Entity } from "../Entities/Entity";
 import { CanonBall } from "./CanonBall";
 import type { IShooter } from "../Interfaces/IShooter";
-import { Graphics, Point } from "pixi.js";
+import { Point } from "pixi.js";
 import type { IDamageDealer } from "../Interfaces/IDamageDealer";
 import type { CollisionType } from "../Collision/CollisionType";
 
@@ -38,7 +38,7 @@ export class Canon extends Entity implements IShooter, IDamageDealer {
         const spawnPosY = globalPos.y - spawnOffset * Math.cos(globalRotation);
 
 
-        const canonBall : CanonBall = new CanonBall(new Point(spawnPosX, spawnPosY), globalRotation, this.damage, this.projectileCollisionType, this.ignoredCollisionLayers);
+        new CanonBall(new Point(spawnPosX, spawnPosY), globalRotation, this.damage, this.projectileCollisionType, this.ignoredCollisionLayers);
     }
     
 }

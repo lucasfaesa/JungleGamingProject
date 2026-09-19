@@ -83,7 +83,7 @@ export class Spawner implements IUpdateable {
     }
 
     private spawnRandomEnemy(position : Point){
-        const randomNumber : number = RandomHelper.randomInt(0, 10);
+        const randomNumber : number = RandomHelper.randomInt(0, this.maxSpawnChances);
         
         let enemy : EnemyShip;
 

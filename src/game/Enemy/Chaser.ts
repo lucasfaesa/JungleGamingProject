@@ -1,4 +1,4 @@
-import { Graphics, Sprite, type Point } from "pixi.js";
+import { type Point } from "pixi.js";
 import type { Player } from "../Player/Player";
 import { EnemyShip } from "./EnemyShip";
 import type { TilemapData } from "../Map/TilemapData";
