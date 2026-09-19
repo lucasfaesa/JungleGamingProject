@@ -122,8 +122,20 @@ export abstract class EnemyShip extends Ship {
         return Math.sqrt(dx * dx + dy * dy) || 1;
     }
 
+    public killedByPlayer: boolean = false;
+
+    public override onDamageTaken(damage: number): void {
+        // If this hit is lethal, mark it as killed by the player before destroy() is called
+        if (this.health - damage <= 0) {
+            this.killedByPlayer = true;
+        }
+        super.onDamageTaken(damage);
+    }
+
     public override destroy(): void {
-        eventHub.trigger(GameEvents.ENEMY_DIED, this);
+        if (this.killedByPlayer) {
+            eventHub.trigger(GameEvents.ENEMY_DIED, this);
+        }
         super.destroy();
     }
 }
