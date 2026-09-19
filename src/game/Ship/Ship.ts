@@ -9,6 +9,7 @@ import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import type { IDamageable } from "../Interfaces/IDamageable";
 import type { IDamageDealer } from "../Interfaces/IDamageDealer";
+import { HealthBar } from "../Health/HealthBar.ts";
 
 export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICollideable, IDamageable, IDamageDealer{
     
@@ -26,6 +27,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
     protected previousPosition: Point = new Point();
     protected previousRotation: number = 0;
     
+    private healthBar : HealthBar;
+
     //health
     health: number = 10;
     isAlive: boolean = true;
@@ -37,11 +40,21 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
         this.previousPosition.copyFrom(newPosition);
         this.previousRotation = rotation;
 
+        this.healthBar = new HealthBar(this.health);
+        this.healthBar.updateHealth(this.health);
+
+        this.addChild(this.healthBar);
+
         // Register to collision system
         eventHub.trigger(GameEvents.COLLIDEABLE_INSTANTIATED, this);
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this);
     }    
     
+    protected initializeHealth(maxHealth: number): void {
+        this.health = maxHealth;
+        this.healthBar.setMaxHealth(maxHealth);
+    }
+
     public getCollisionPoints(): Point[] {
         return collisionHelpers.getBoxColliderPoints(this.position, this.colliderSize);
     }
@@ -89,8 +102,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
 
     onDamageTaken(damage: number): void {
         this.health -= damage;
-
-        console.log("Damage taken, current health: " + this.health);
+        this.healthBar.updateHealth(this.health);
+        //console.log("Damage taken, current health: " + this.health);
 
         if(this.health <= 0){
             this.health = 0;

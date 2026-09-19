@@ -34,7 +34,7 @@ export class Shooter extends EnemyShip implements IShooter{
         this.canMove = false;
         this.ignoredCollisionLayers = [CollisionType.EnemyProjectile, CollisionType.Enemy];
 
-        this.health = 4;
+        this.initializeHealth(4);
         this.damage = 1;
 
         this.setSprite(

@@ -22,7 +22,7 @@ export class Player extends Ship implements IShooter {
         this.ignoredCollisionLayers = [CollisionType.Player, CollisionType.PlayerProjectile];
 
         //health
-        this.health = 10;
+        this.initializeHealth(10);
         this.damage = 1;
 
         this.setSprite(new Graphics().rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y).fill(0xff0000));
