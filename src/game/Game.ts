@@ -5,6 +5,8 @@ import { PlayerController } from "./Player/PlayerController";
 import { World } from "./World/World";
 import { GameManager } from "./GameFlow/GameManager";
 import { UIManager } from "./UI/UIManager";
+import { eventHub } from "./Event/EventHub";
+import { GameEvents } from "./Event/GameEvents";
 
 /*
   Game (GameManager / Engine Coordinator)
@@ -82,11 +84,14 @@ export class Game {
     return this.initPromise;
   }
 
+  private readonly onRestartRequested = () => this.restart();
+
   // Like Unity's Start(): runs once after init to spawn initial scene objects
   private start(): void {
     if (!this.app) return;
 
-    
+    eventHub.subscribe(GameEvents.RESTART_REQUESTED, this.onRestartRequested);
+
     //creating world, player and assigning it to the controller
     this.world = new World(this.app.stage);
     this.playerController = new PlayerController(this.world.getPlayer(), this.inputManager);
@@ -96,12 +101,32 @@ export class Game {
     this.app.stage.addChild(this.UIManager);
 
     //creating manager
-    this.gameManager = new GameManager(this.UIManager);
+    this.gameManager = new GameManager(this.UIManager, this.inputManager);
+  }
+
+  public restart(): void {
+    if (!this.app) return;
+
+    // Cleanup previous game instances
+    this.gameManager?.destroy();
+    this.world?.destroy();
+    if (this.UIManager) {
+      this.app.stage.removeChild(this.UIManager);
+      this.UIManager.destroy();
+    }
+
+    // Re-instantiate everything clean
+    this.world = new World(this.app.stage);
+    this.playerController = new PlayerController(this.world.getPlayer(), this.inputManager);
+
+    this.UIManager = new UIManager();
+    this.app.stage.addChild(this.UIManager);
+
+    this.gameManager = new GameManager(this.UIManager, this.inputManager);
   }
 
   // Like Unity's Update(): runs every frame, ticker.deltaTime is like Time.deltaTime
   private update(deltaTime: number): void {
-    
     this.gameManager?.update(deltaTime);
     this.world?.update(deltaTime);
     this.playerController?.update(deltaTime);
@@ -110,6 +135,8 @@ export class Game {
   // Like Unity's OnDestroy(): frees GPU resources and removes the canvas
   async destroy(): Promise<void> {
     this.isDestroyed = true;
+
+    eventHub.unsubscribe(GameEvents.RESTART_REQUESTED, this.onRestartRequested);
 
     this.UIManager?.destroy();
     this.gameManager?.destroy();

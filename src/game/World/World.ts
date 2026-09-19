@@ -50,6 +50,15 @@ export class World{
 
         this.collisionManager?.destroy();
         this.spawner?.destroy();
+
+        if (this.tileMap) {
+            this.stage.removeChild(this.tileMap);
+            this.tileMap.destroy();
+        }
+
+        if (this.player && this.player.isAlive) {
+            this.player.destroy();
+        }
     }
 
     public update(deltaTime: number): void {

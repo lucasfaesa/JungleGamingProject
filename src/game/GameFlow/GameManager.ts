@@ -1,6 +1,7 @@
 import { eventHub } from "../Event/EventHub";
 import { GameEvents } from "../Event/GameEvents";
 import type { UIManager } from "../UI/UIManager";
+import type { InputManager } from "../input/InputManager";
 
 export const GameState = {  InitialCountdown: 'InitialCountdown',  Playing: 'Playing',  Loss: 'Loss',  Victory: 'Victory',} as const;
 export type GameState = typeof GameState[keyof typeof GameState];
@@ -15,16 +16,18 @@ export class GameManager {
     private currentCountdown : number = this.initialCountdown;
 
     private uiManager : UIManager;
+    private inputManager : InputManager;
 
     private score: number = 0;
 
     private readonly onPlayerDied = (data?: unknown) => this.OnPlayerDied(data);
     private readonly onEnemyDied  = (data?: unknown) => this.OnEnemyDied(data);
 
-    constructor(uiManager : UIManager){
+    constructor(uiManager : UIManager, inputManager : InputManager){
         eventHub.subscribe(GameEvents.PLAYER_DIED, this.onPlayerDied);
         eventHub.subscribe(GameEvents.ENEMY_DIED,  this.onEnemyDied);
         this.uiManager = uiManager;
+        this.inputManager = inputManager;
         this.currentState = GameState.InitialCountdown;
     }
 
@@ -70,13 +73,23 @@ export class GameManager {
             break;
 
             case GameState.Loss:
-                this.uiManager.showTextOnScreenCenter("GAME OVER!")
+                this.uiManager.showTextOnScreenCenter("GAME OVER!");
+                this.uiManager.showRestartPrompt(true);
+                this.checkRestartInput();
                 break;
 
             case GameState.Victory:
-                this.uiManager.showTextOnScreenCenter("VICTORY!")
+                this.uiManager.showTextOnScreenCenter("VICTORY!");
+                this.uiManager.showRestartPrompt(true);
+                this.checkRestartInput();
                 break;
 
+        }
+    }
+
+    private checkRestartInput(): void {
+        if (this.inputManager.tryConsumeAction("restart")) {
+            eventHub.trigger(GameEvents.RESTART_REQUESTED);
         }
     }
 

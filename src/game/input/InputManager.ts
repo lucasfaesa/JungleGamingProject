@@ -18,6 +18,7 @@ export class InputManager {
         shootFront : false,  
         shootLeft : false,
         shootRight : false,
+        restart : false,
     };
 
     // tracks whether a pressed action has already been handled for the current key press
@@ -26,6 +27,7 @@ export class InputManager {
         shootFront: false,
         shootLeft: false,
         shootRight: false,
+        restart: false,
     };
 
     private keysMap: Record<string, string> = {
@@ -44,7 +46,9 @@ export class InputManager {
         Space: this.shootForwardAction,
 
         KeyQ: this.shootLeftAction,
-        KeyE: this.shootRightAction
+        KeyE: this.shootRightAction,
+
+        KeyR: "restart",
     };
 
     constructor(){

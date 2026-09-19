@@ -9,6 +9,7 @@ export const GameEvents = {
     ENEMY_DIED: "EnemyDied",
 
     GAME_STATE_CHANGED: "GameStateChanged",
+    RESTART_REQUESTED: "RestartRequested",
 } as const;
 
 export type GameEventType = typeof GameEvents[keyof typeof GameEvents];
