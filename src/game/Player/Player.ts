@@ -20,7 +20,7 @@ export class Player extends Ship implements IShooter {
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Player; 
         this.ignoredCollisionLayers = [CollisionType.Player, CollisionType.PlayerProjectile];
-        
+        this.colliderSize = new Point(5,5);
         //health
         this.initializeHealth(10);
         this.damage = 1;
