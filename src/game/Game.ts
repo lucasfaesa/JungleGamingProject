@@ -60,6 +60,11 @@ export class Game {
           alias: "PirateAES",
           src: "/assets/fonts/pirateAES.TTF",
           data: { family: "PirateAES" }
+        },
+        {
+          alias: "PirateKids",
+          src: "/assets/fonts/PirateKids.otf",
+          data: { family: "PirateKids" }
         }
       ]);
       
