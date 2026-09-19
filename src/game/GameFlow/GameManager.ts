@@ -16,16 +16,21 @@ export class GameManager {
 
     private uiManager : UIManager;
 
+    private score: number = 0;
+
     private readonly onPlayerDied = (data?: unknown) => this.OnPlayerDied(data);
+    private readonly onEnemyDied  = (data?: unknown) => this.OnEnemyDied(data);
 
     constructor(uiManager : UIManager){
         eventHub.subscribe(GameEvents.PLAYER_DIED, this.onPlayerDied);
+        eventHub.subscribe(GameEvents.ENEMY_DIED,  this.onEnemyDied);
         this.uiManager = uiManager;
         this.currentState = GameState.InitialCountdown;
     }
 
     public destroy(){
         eventHub.unsubscribe(GameEvents.PLAYER_DIED, this.onPlayerDied);
+        eventHub.unsubscribe(GameEvents.ENEMY_DIED,  this.onEnemyDied);
     }
 
     private OnPlayerDied (data?: unknown) {
@@ -33,6 +38,14 @@ export class GameManager {
             this.changeState(GameState.Loss);
         }
     };
+
+    private OnEnemyDied (data?: unknown) {
+        if (this.currentState !== GameState.Playing)  //ignore if not playing, because at the end everyone is destroyed
+            return;
+
+        this.score++;
+        this.uiManager.updateScore(this.score);
+    }
 
     public update(deltaTime: number){
         switch(this.currentState){

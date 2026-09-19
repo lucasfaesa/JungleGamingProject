@@ -6,6 +6,7 @@ export const GameEvents = {
     COLLIDEABLE_DESPAWNED: "CollideableDespawned",
 
     PLAYER_DIED: "PlayerDied",
+    ENEMY_DIED: "EnemyDied",
 
     GAME_STATE_CHANGED: "GameStateChanged",
 } as const;

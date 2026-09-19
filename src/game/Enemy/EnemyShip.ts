@@ -2,6 +2,8 @@ import { type Point } from "pixi.js";
 import { Ship } from "../Ship/Ship";
 import type { Player } from "../Player/Player";
 import type { TilemapData } from "../Map/TilemapData";
+import { eventHub } from "../Event/EventHub";
+import { GameEvents } from "../Event/GameEvents";
 
 export abstract class EnemyShip extends Ship {
 
@@ -118,5 +120,10 @@ export abstract class EnemyShip extends Ship {
         const dx = this.targetPlayer.position.x - this.position.x;
         const dy = this.targetPlayer.position.y - this.position.y;
         return Math.sqrt(dx * dx + dy * dy) || 1;
+    }
+
+    public override destroy(): void {
+        eventHub.trigger(GameEvents.ENEMY_DIED, this);
+        super.destroy();
     }
 }
