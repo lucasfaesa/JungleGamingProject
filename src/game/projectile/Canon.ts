@@ -20,8 +20,9 @@ export class Canon extends Entity implements IShooter, IDamageDealer {
         this.damage = damage;
         this.projectileCollisionType = collisionType;
         this.ignoredCollisionLayers = ignoredCollisionLayers;
-
-        this.setSprite(new Graphics().rect(-this.graphicSize.x/2, -this.graphicSize.y/2, this.graphicSize.x, this.graphicSize.y).fill(0xA000FF));
+        this.graphicSize = new Point(12,20);
+        
+        this.setSpriteByName("cannon");
     }
 
     shoot(): void {

@@ -30,8 +30,8 @@ export class CanonBall extends Entity implements IProjectile, ICollideable, IDam
         this.damage = damage;
         this.collisionLayer = collisionType;
         this.ignoredCollisionLayers = ignoredCollisionLayers;
-
-        this.setSprite(new Graphics().rect(this.center.x, this.center.y, this.colliderSize.x, this.colliderSize.y).fill(0xFFFF00));
+        
+        this.setSpriteByName("canonBall");
 
         eventHub.trigger(GameEvents.UPDATEABLE_INSTANTIATED, this); //world will listen and update accordingly
         eventHub.trigger(GameEvents.COLLIDEABLE_INSTANTIATED, this); //Collision manager will listen and do its own thing

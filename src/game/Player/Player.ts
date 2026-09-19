@@ -1,4 +1,4 @@
-import { Point, Graphics, DEG_TO_RAD } from "pixi.js";
+import { Point, Graphics, DEG_TO_RAD, Sprite } from "pixi.js";
 import { Ship } from "../Ship/Ship";
 import { Canon } from "../projectile/Canon";
 import type { IShooter } from "../Interfaces/IShooter";
@@ -20,18 +20,19 @@ export class Player extends Ship implements IShooter {
         this.rotationSpeed = 3;
         this.collisionLayer = CollisionType.Player; 
         this.ignoredCollisionLayers = [CollisionType.Player, CollisionType.PlayerProjectile];
-
+        
         //health
         this.initializeHealth(10);
         this.damage = 1;
 
-        this.setSprite(new Graphics().rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y).fill(0xff0000));
+        //sprite
+        this.setSpriteByName("playerShip");
 
         const projectileCollisionsToIgnore: CollisionType[] = [  CollisionType.Player,  CollisionType.PlayerProjectile];
 
-        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
-        this.leftCanon = new Canon(new Point(-16, 0), -90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
-        this.rightCanon = new Canon(new Point(16, 0), 90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
+        this.frontCanon = new Canon(new Point(0, -50), 0, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
+        this.leftCanon = new Canon(new Point(-16, -20), -90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
+        this.rightCanon = new Canon(new Point(16, -20), 90 * DEG_TO_RAD, this.damage, CollisionType.PlayerProjectile, projectileCollisionsToIgnore);
 
         this.addChild(this.frontCanon);
         this.addChild(this.leftCanon);

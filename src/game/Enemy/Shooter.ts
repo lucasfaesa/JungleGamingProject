@@ -37,17 +37,13 @@ export class Shooter extends EnemyShip implements IShooter{
         this.initializeHealth(4);
         this.damage = 1;
 
-        this.setSprite(
-            new Graphics()
-                .rect(-this.graphicSize.x / 2, -this.graphicSize.y / 2, this.graphicSize.x, this.graphicSize.y)
-                .fill(0xFF00FF)
-        );
+        //sprite
+        this.setSpriteByName("shooterShip");
 
         const projectileCollisionsToIgnore: CollisionType[] = [  CollisionType.Enemy,  CollisionType.EnemyProjectile];
-        this.frontCanon = new Canon(new Point(0, -16), 0, this.damage, CollisionType.EnemyProjectile, projectileCollisionsToIgnore);
+        this.frontCanon = new Canon(new Point(0, -50), 0, this.damage, CollisionType.EnemyProjectile, projectileCollisionsToIgnore);
         this.addChild(this.frontCanon);
         
-        console.log("Shooter Spawned");
     }
     
     public update(deltaTime: number): void {

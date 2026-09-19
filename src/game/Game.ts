@@ -51,21 +51,15 @@ export class Game {
 
       // Load custom pirate fonts before starting the game
       await Assets.load([
-        {
-          alias: "PirateViking",
-          src: "/assets/fonts/PIRATE-VIKING.otf",
-          data: { family: "PirateViking" }
-        },
-        {
-          alias: "PirateAES",
-          src: "/assets/fonts/pirateAES.TTF",
-          data: { family: "PirateAES" }
-        },
-        {
-          alias: "PirateKids",
-          src: "/assets/fonts/PirateKids.otf",
-          data: { family: "PirateKids" }
-        }
+        { alias: "PirateViking", src: "/assets/fonts/PIRATE-VIKING.otf", data: { family: "PirateViking" } },
+        { alias: "PirateAES", src: "/assets/fonts/pirateAES.TTF", data: { family: "PirateAES" } },
+        { alias: "PirateKids", src: "/assets/fonts/PirateKids.otf", data: { family: "PirateKids" } },
+        { alias: "playerShip", src: "/assets/ships/player.png" },
+        { alias: "chaserShip", src: "/assets/ships/chaser.png" },
+        { alias: "shooterShip", src: "/assets/ships/shooter.png" },
+        { alias: "canonBall", src: "/assets/projectiles/canonBall.png" },
+        { alias: "cannon", src: "/assets/props/cannon.png" },
+        { alias: "water", src: "/assets/tiles/water.png" },
       ]);
       
       this.start();

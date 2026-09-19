@@ -22,8 +22,8 @@ export class HealthBar extends Container {
         this.fill.x = -this.barWidth / 2;
         this.addChild(this.fill);
     
-        //y pos, above player
-        this.y = -40;
+        //y pos, under player
+        this.y = 70;
     }
 
     //update heath bar size based on current health and max health

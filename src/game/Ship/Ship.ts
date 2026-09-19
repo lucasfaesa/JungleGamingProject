@@ -1,4 +1,4 @@
-import { Point } from "pixi.js";
+import { Point, Sprite } from "pixi.js";
 import { Entity } from "../Entities/Entity";
 import type { IMoveable } from "../Interfaces/IMoveable";
 import type { ISpawneable } from "../Interfaces/ISpawneable";
@@ -13,12 +13,12 @@ import { HealthBar } from "../Health/HealthBar.ts";
 
 export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICollideable, IDamageable, IDamageDealer{
     
-    protected graphicSize: Point = new Point(50, 50);
+    protected graphicSize: Point = new Point(66, 113);
     public moveSpeed: number = 100;
     public rotationSpeed: number = 2.5;
     
     //collider stuff
-    public colliderSize: Point = new Point(50, 50);
+    public colliderSize: Point = new Point(50, 100);
     public halfSize: Point = new Point(this.colliderSize.x/2, this.colliderSize.y/2,);
     public center: Point = new Point(-this.colliderSize.x/2, -this.colliderSize.y/2);
     public collisionLayer: CollisionType = CollisionType.DEFAULT;
@@ -111,6 +111,8 @@ export abstract class Ship extends Entity implements IMoveable, ISpawneable, ICo
             this.destroy();
         }
     }
+
+    
 
     public destroy(): void {
         eventHub.trigger(GameEvents.COLLIDEABLE_DESPAWNED, this);
