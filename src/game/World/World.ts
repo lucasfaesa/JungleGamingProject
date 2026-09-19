@@ -82,6 +82,7 @@ export class World{
         this.tilemapData = new TilemapData();
         this.tileMap = new TileMap(this.tilemapData);
         this.stage.addChild(this.tileMap);
+        this.updateables.push(this.tileMap);
     }
 
     private activateCollisions(){

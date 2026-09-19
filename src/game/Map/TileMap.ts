@@ -1,12 +1,16 @@
-import { Container, Graphics } from "pixi.js";
+import { Assets, Container, Graphics, TilingSprite } from "pixi.js";
 import { TilemapData } from "./TilemapData";
 import { TileInfo, TileType } from "./Tileset";
-
+import type { IUpdateable } from "../Interfaces/IUpdateable";
 
 //manages grid construction (rendering) and colision data in the future
-export class TileMap extends Container {
+export class TileMap extends Container implements IUpdateable {
 
     private tilemapData: TilemapData;
+    private waterBackground!: TilingSprite;
+
+    private waterScrollSpeedX: number = 8;
+    private waterScrollSpeedY: number = 4;
 
     constructor(tilemapData: TilemapData) {
         super();
@@ -14,7 +18,26 @@ export class TileMap extends Container {
         this.buildMap();
     }
 
+    //moving effect for the water
+    public update(deltaTime: number): void {
+        this.waterBackground.tilePosition.x += this.waterScrollSpeedX * deltaTime;
+        this.waterBackground.tilePosition.y += this.waterScrollSpeedY * deltaTime;
+    }
+
     private buildMap(): void {
+        const totalWidth = this.tilemapData.columns * this.tilemapData.tile_width;
+        const totalHeight = this.tilemapData.rows * this.tilemapData.tile_height;
+
+        // water background covering whole screen using TilingSprite
+        const waterTexture = Assets.get("water");
+        this.waterBackground = new TilingSprite({
+            texture: waterTexture,
+            width: totalWidth,
+            height: totalHeight,
+        });
+        this.addChild(this.waterBackground);
+
+        // 2. Only instantiate solid / island tiles on top
         const grid = this.tilemapData.getGrid();
 
         for (let row = 0; row < this.tilemapData.rows; row++) {
@@ -23,7 +46,14 @@ export class TileMap extends Container {
 
                 const tileDef = TileInfo.getTile(tileId);
 
-                const tileGraphic = new Graphics().rect(0, 0, this.tilemapData.tile_width, this.tilemapData.tile_height).fill(tileDef.color);
+                // now skipping drawing water as it is drawn by TilingSprite
+                if (tileDef.type === TileType.Water) {
+                    continue;
+                }
+
+                const tileGraphic = new Graphics()
+                    .rect(0, 0, this.tilemapData.tile_width, this.tilemapData.tile_height)
+                    .fill(tileDef.color);
 
                 tileGraphic.position.set(col * this.tilemapData.tile_width, row * this.tilemapData.tile_height);
 
