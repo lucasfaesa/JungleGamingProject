@@ -1,4 +1,4 @@
-import { Application, Point } from "pixi.js";
+import { Application, Assets, Point } from "pixi.js";
 import { InputManager } from "./input/InputManager";
 import { Player } from "./Player/Player";
 import { PlayerController } from "./Player/PlayerController";
@@ -48,6 +48,20 @@ export class Game {
       
       this.app = app;
       container.appendChild(app.canvas);
+
+      // Load custom pirate fonts before starting the game
+      await Assets.load([
+        {
+          alias: "PirateViking",
+          src: "/assets/fonts/PIRATE-VIKING.otf",
+          data: { family: "PirateViking" }
+        },
+        {
+          alias: "PirateAES",
+          src: "/assets/fonts/pirateAES.TTF",
+          data: { family: "PirateAES" }
+        }
+      ]);
       
       this.start();
 

@@ -8,16 +8,28 @@ export class UIManager extends Container{
     constructor(){
         super();
 
-        const timerStyle = new TextStyle({fontFamily: "monospace", fontSize: 32, fontWeight:"bold", fill: "#FFFFFF", stroke:{color:"#000000", width:4}});
+        const timerStyle = new TextStyle({
+            fontFamily: "PirateViking",
+            fontSize: 52,
+            fontWeight: "bold",
+            fill: "#FFFFFF",
+            stroke: { color: "#000000", width: 4 }
+        });
         this.timerText = new Text({ text: "", style: timerStyle });
-        this.timerText.anchor.set(0.5,0); //bottom center
-        this.timerText.position.set(640,20);
+        this.timerText.anchor.set(0.5, 0); //top center
+        this.timerText.position.set(640, 20);
         this.addChild(this.timerText);
 
-        const stateStyle = new TextStyle({fontFamily: "Arial", fontSize: 64, fontWeight: "bold", fill: "#ffff00", stroke: { color: "#000000", width: 6 },});
+        const stateStyle = new TextStyle({
+            fontFamily: "PirateAES",
+            fontSize: 200,
+            fontWeight: "bold",
+            fill: "#ffff00",
+            stroke: { color: "#000000", width: 6 }
+        });
         this.stateText = new Text({ text: "", style: stateStyle });
-        this.stateText.anchor.set(0.5,0.5);//middle center
-        this.stateText.position.set(640,360);
+        this.stateText.anchor.set(0.5, 0.5); //middle center
+        this.stateText.position.set(640, 360);
         this.addChild(this.stateText);
     }
 
