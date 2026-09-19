@@ -1,32 +1,63 @@
-# React + TypeScript + Vite
+# 🏴‍☠️ Pirate Battle
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A 2D naval top-down shooter challenge developed for **Jungle Gaming** within a 2-day timeframe, built using **React**, **TypeScript**, and **PixiJS v8**.
 
-Currently, two official plugins are available:
+🔗 **Live Demo:** [https://jungle-gaming-project.vercel.app/](https://jungle-gaming-project.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🕹️ Controls
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Key | Action |
+| :--- | :--- |
+| <kbd>W</kbd> / <kbd>↑</kbd> | Move Forward |
+| <kbd>S</kbd> / <kbd>↓</kbd> | Move Backward |
+| <kbd>A</kbd> / <kbd>←</kbd> | Rotate Left |
+| <kbd>D</kbd> / <kbd>→</kbd> | Rotate Right |
+| <kbd>Space</kbd> | Shoot Front Cannon |
+| <kbd>Q</kbd> | Shoot Port (Left) Broadside |
+| <kbd>E</kbd> | Shoot Starboard (Right) Broadside |
+| <kbd>R</kbd> | Restart Match (Available on Game Over / Victory) |
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🛠️ Tech Stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- **Renderer / Game Engine**: [PixiJS v8](https://pixijs.com/)
+- **UI & Environment**: [React 19](https://react.dev/) + [Vite](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
+
+---
+
+## 🚀 Getting Started Locally
+
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm or yarn
+
+### Installation
+```bash
+# Clone the repository
+git clone https://github.com/lucasfaesa/JungleGamingProject.git
+
+# Navigate to project directory
+cd pirate-battle
+
+# Install dependencies
+npm install
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Development
+```bash
+npm run dev
+```
+Open your browser at `http://localhost:5173`.
+
+### Production Build & Typecheck
+```bash
+# Run strict TypeScript verification and production build
+npm run build
+
+# Preview production build locally
+npm run preview
+```
